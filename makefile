@@ -41,7 +41,7 @@ endef
 $(DESTDIR)/bin/vnctools-% : \
 		$(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-%-$(VERSION)
 	install -dv $(dir $@)
-	ln -srTv $< $@
+	ln -sfrTv $< $@
 
 $(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-%-$(VERSION) : \
 		$(DIR_BUILD)/vnctools-%-$(VERSION)
