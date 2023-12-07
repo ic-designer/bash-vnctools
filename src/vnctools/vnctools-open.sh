@@ -4,8 +4,8 @@ function main() {
     bashargs::add_required_value --hostname
     bashargs::add_required_value --username
     bashargs::add_required_value --localport
-    bashargs::add_optional_flag --localport
-    bashargs::add_optional_flag --localport
+    bashargs::add_optional_flag --realvnc
+    bashargs::add_optional_flag --screenshare
     bashargs::parse_args $@
 
     clean_up () {
