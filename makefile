@@ -1,7 +1,6 @@
 DESTDIR:=~/.local
 VERSION:=0.1.0
 
-.DELETE_ON_ERROR:
 .PHONY: install
 install: \
 		$(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-kill-$(VERSION) \
@@ -42,7 +41,7 @@ $(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-%-$(VERSION) : \
 $(DIR_BUILD)/vnctools-%-$(VERSION) : \
 		$(DIR_SRC)/vnctools/vnctools-%.sh \
 		$(DIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh \
-		| $(DIR_BUILD)/
+		| $(DIR_BUILD)
 	@echo '#!/usr/bin/env bash' > $@
 	@cat $^ >> $@
 	@echo '(' >> $@
@@ -50,14 +49,14 @@ $(DIR_BUILD)/vnctools-%-$(VERSION) : \
 	@echo '    main "$$@"' >> $@
 	@echo ')' >> $@
 
-$(DIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh: | $(DIR_DEPS)/
+$(DIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh: | $(DIR_DEPS)
 	rm -rf $(DIR_DEPS)/bash-bashargs
 	git clone git@github.com:jfredenburg/bash-bashargs.git $(DIR_DEPS)/bash-bashargs
 
-$(DIR_DEPS)/: $(DIR_BUILD)/
+$(DIR_DEPS): $(DIR_BUILD)
 	-@mkdir -p $@
 
-$(DIR_BUILD)/:
+$(DIR_BUILD):
 	-@mkdir -p $@
 
 clean:
