@@ -28,15 +28,6 @@ DIR_BUILD:=.make
 DIR_SRC:=src
 DIR_DEPS:=$(DIR_BUILD)/deps
 
-define bash-merge =
-	echo '#!/usr/bin/env bash' > $@
-	cat $^ >> $@
-	# echo '(' >> $@
-	echo '    set -euo pipefail' >> $@
-	echo '    main "$$@"' >> $@
-	# echo ')' >> $@
-endef
-
 
 $(DESTDIR)/bin/vnctools-% : \
 		$(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-%-$(VERSION)
@@ -52,7 +43,12 @@ $(DIR_BUILD)/vnctools-%-$(VERSION) : \
 		$(DIR_SRC)/vnctools/vnctools-%.sh \
 		$(DIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh \
 		| $(DIR_BUILD)/
-	@$(bash-merge)
+	@echo '#!/usr/bin/env bash' > $@
+	@cat $^ >> $@
+	@echo '(' >> $@
+	@echo '    set -euo pipefail' >> $@
+	@echo '    main "$$@"' >> $@
+	@echo ')' >> $@
 
 $(DIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh: | $(DIR_DEPS)/
 	rm -rf $(DIR_DEPS)/bash-bashargs
