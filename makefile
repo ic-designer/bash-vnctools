@@ -1,4 +1,4 @@
-DESTDIR:=~/.local/
+DESTDIR:=~/.local
 VERSION:=0.1.0
 
 .DELETE_ON_ERROR:
@@ -32,12 +32,12 @@ DIR_DEPS:=$(DIR_BUILD)/deps
 $(DESTDIR)/bin/vnctools-% : \
 		$(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-%-$(VERSION)
 	install -dv $(dir $@)
-	ln -sfrTv $< $@
+	ln -sfhv $(realpath $<) $@
 
 $(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/vnctools-%-$(VERSION) : \
 		$(DIR_BUILD)/vnctools-%-$(VERSION)
 	install -dv $(dir $@)
-	install -Tv -m 544 $< $@
+	install -v -m 544 $< $(dir $@)
 
 $(DIR_BUILD)/vnctools-%-$(VERSION) : \
 		$(DIR_SRC)/vnctools/vnctools-%.sh \
@@ -54,8 +54,11 @@ $(DIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh: | $(DIR_DEPS)/
 	rm -rf $(DIR_DEPS)/bash-bashargs
 	git clone git@github.com:jfredenburg/bash-bashargs.git $(DIR_DEPS)/bash-bashargs
 
-%/ :
-	mkdir -p $@
+$(DIR_DEPS)/: $(DIR_BUILD)/
+	-@mkdir -p $@
+
+$(DIR_BUILD)/:
+	-@mkdir -p $@
 
 clean:
 	rm -rf $(DIR_BUILD)
