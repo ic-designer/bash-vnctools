@@ -15,13 +15,13 @@ install: \
 
 .PHONY: uninstall
 uninstall:
-	\rm -fv $(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/*
-	\rm -dv $(DESTDIR)/lib/vnctools/vnctools-$(VERSION) || true
-	\rm -dv $(DESTDIR)/lib/vnctools || true
-	\rm -dv $(DESTDIR)/lib || true
-	\rm -v $(DESTDIR)/bin/vnctools-* || true
-	\rm -dv $(DESTDIR)/bin || true
-	\rm -dv $(DESTDIR) || true
+	-\rm -fv $(DESTDIR)/lib/vnctools/vnctools-$(VERSION)/*
+	-\rm -dv $(DESTDIR)/lib/vnctools/vnctools-$(VERSION)
+	-\rm -dv $(DESTDIR)/lib/vnctools
+	-\rm -dv $(DESTDIR)/lib
+	-\rm -v $(DESTDIR)/bin/vnctools-*
+	-\rm -dv $(DESTDIR)/bin
+	-\rm -dv $(DESTDIR)
 
 
 DIR_BUILD:=.make
