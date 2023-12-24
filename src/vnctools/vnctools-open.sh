@@ -1,4 +1,3 @@
-
 function main() {
     bashargs::add_required_value --display
     bashargs::add_required_value --hostname
