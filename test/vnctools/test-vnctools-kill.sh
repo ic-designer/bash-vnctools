@@ -20,8 +20,8 @@ function test_vnctools_kill_with_valid_args() {
     waxwing::monkey_patch_commands_to_record_command_name_and_args ssh
     main \
         --display=display \
-        --username=username \
-        --hostname=hostname
+        --hostname=hostname \
+        --username=username
     actual=$(waxwing::read_pipe)
     expected=$(cat << EOF
 ssh username@hostname \

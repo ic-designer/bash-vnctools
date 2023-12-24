@@ -13,8 +13,8 @@ function test_vnctools_list_missing_username() {
 function test_vnctools_list_with_valid_args() {
     waxwing::monkey_patch_commands_to_record_command_name_and_args ssh
     main \
-        --username=username \
-        --hostname=hostname
+        --hostname=hostname \
+        --username=username
     actual=$(waxwing::read_pipe)
     expected="ssh username@hostname vncserver -list"
     [[ ${actual} == ${expected} ]]
