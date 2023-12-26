@@ -1,33 +1,18 @@
+DESTDIR:=~/.local
+VERSION:=0.1.0
+PKGSUBDIR:=lib/vnctools/vnctools-$(VERSION)
+
 .SUFFIXES:
 .DELETE_ON_ERROR:
 
-DESTDIR:=~/.local
-VERSION:=0.1.0
-
-PKGSUBDIR:=lib/vnctools/vnctools-$(VERSION)
-
 
 .PHONY: install
-install: \
-		$(DESTDIR)/$(PKGSUBDIR)/vnctools-kill-$(VERSION) \
-		$(DESTDIR)/$(PKGSUBDIR)/vnctools-list-$(VERSION) \
-		$(DESTDIR)/$(PKGSUBDIR)/vnctools-open-$(VERSION) \
-		$(DESTDIR)/$(PKGSUBDIR)/vnctools-start-$(VERSION) \
-		$(DESTDIR)/bin/vnctools-kill \
-		$(DESTDIR)/bin/vnctools-list \
-		$(DESTDIR)/bin/vnctools-open \
-		$(DESTDIR)/bin/vnctools-start \
+install: dist
+	$(MAKE) -C $(DIR_BUILD_DIST)/$(PKGSUBDIR) install
 
-.PHONY: uninstall
-uninstall:
-	-\rm -fv $(DESTDIR)/$(PKGSUBDIR)/*
-	-\rm -dv $(DESTDIR)/$(PKGSUBDIR)
-	-\rm -dv $(DESTDIR)/lib/vnctools
-	-\rm -dv $(DESTDIR)/lib
-	-\rm -v $(DESTDIR)/bin/vnctools-*
-	-\rm -dv $(DESTDIR)/bin
-	-\rm -dv $(DESTDIR)
-
+.PHONY: install
+uninstall: dist
+	$(MAKE) -C $(DIR_BUILD_DIST)/$(PKGSUBDIR) uninstall
 
 
 DIR_BUILD=.make
@@ -51,13 +36,23 @@ define build-bash-library
 endef
 
 
-
 .PHONY: dist
 dist: \
 		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-kill-$(VERSION) \
 		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-list-$(VERSION) \
 		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-open-$(VERSION) \
-		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-start-$(VERSION)
+		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-start-$(VERSION) \
+		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/makefile
+
+$(DIR_BUILD_DIST)/$(PKGSUBDIR)/makefile: \
+		src/vnctools/make/install.template.mk
+	@echo "Building makefile $@"
+	@echo "override VERSION:=${VERSION}" >>$@
+	@echo "DESTDIR:=~/.local" >>$@
+	@echo "PKGSUBDIR:=${PKGSUBDIR}" >>$@
+	@echo "" >>$@
+	@cat $< >>$@
+
 
 $(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-%-$(VERSION) : \
 		$(DIR_BUILD)/vnctools-%-$(VERSION).merged.sh \
@@ -65,7 +60,7 @@ $(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-%-$(VERSION) : \
 	@$(build-bash-executable)
 
 $(DIR_BUILD)/vnctools-%-$(VERSION).merged.sh : \
-		src/vnctools/vnctools-%.sh \
+		src/vnctools/bash/vnctools-%.sh \
 		$(DIR_BUILD_DEPS)/bash-bashargs/src/bashargs/bashargs.sh \
 		| $(DIR_BUILD)/.
 	@$(build-bash-library)
@@ -73,17 +68,6 @@ $(DIR_BUILD)/vnctools-%-$(VERSION).merged.sh : \
 $(DIR_BUILD_DEPS)/bash-bashargs/src/bashargs/bashargs.sh: | $(DIR_BUILD_DEPS)/.
 	@rm -rf $(DIR_BUILD_DEPS)/bash-bashargs
 	git clone git@github.com:jfredenburg/bash-bashargs.git $(DIR_BUILD_DEPS)/bash-bashargs
-
-
-$(DESTDIR)/bin/vnctools-% : \
-		$(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
-	install -dv $(dir $@)
-	ln -sfhv $(realpath $<) $@
-
-$(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION) : \
-		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
-	install -dv $(dir $@)
-	install -v -m 544 $< $(dir $@)
 
 
 .PHONY: test
@@ -104,7 +88,6 @@ $(DIR_BUILD_TEST)/test-vnctools-%.merged.sh : \
  		$(DIR_BUILD)/vnctools-%-$(VERSION).merged.sh \
 		| $(DIR_BUILD_TEST)/.
 	$(build-bash-library)
-
 
 
 clean:
