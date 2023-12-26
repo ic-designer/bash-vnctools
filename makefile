@@ -45,7 +45,7 @@ dist: \
 		$(DIR_BUILD_DIST)/$(PKGSUBDIR)/makefile
 
 $(DIR_BUILD_DIST)/$(PKGSUBDIR)/makefile: \
-		src/vnctools/make/install.template.mk
+		src/vnctools/template/install.template.mk
 	@echo "Building makefile $@"
 	@echo "override VERSION:=${VERSION}" >>$@
 	@echo "DESTDIR:=~/.local" >>$@
