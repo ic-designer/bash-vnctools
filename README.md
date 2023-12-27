@@ -1,5 +1,5 @@
 # VNC tools
-[![Build CI](https://github.com/ic-designer/bash-vnctools/actions/workflows/makefile.yml/badge.svg)](https://github.com/ic-designer/bash-vnctools/actions/workflows/makefile.yml)
+[![Makefile CI](https://github.com/ic-designer/bash-vnctools/actions/workflows/makefile.yml/badge.svg)](https://github.com/ic-designer/bash-vnctools/actions/workflows/makefile.yml)
 
 ## Installation
 
