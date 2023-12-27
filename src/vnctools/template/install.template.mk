@@ -20,7 +20,7 @@ uninstall:
 	-\rm -dv $(DESTDIR)
 
 
-$(DESTDIR)/bin/vnctools-% : vnctools-%-$(VERSION)
+$(DESTDIR)/bin/vnctools-% : $(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
 	install -dv $(dir $@)
 	ln -sfhv $(realpath $<) $@
 
