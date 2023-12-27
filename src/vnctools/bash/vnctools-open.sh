@@ -13,7 +13,6 @@ function main() {
         done
     }
 
-    set -x
     trap "clean_up; exit 1" INT
     ssh  -4CKq -L $(bashargs::get_arg --localport):localhost:5900  \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
