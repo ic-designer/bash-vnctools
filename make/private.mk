@@ -62,7 +62,7 @@ private_install: \
 
 $(DESTDIR)/$(BINSUBDIR)/vnctools-% : $(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
 	@install -dv $(dir $@)
-	@ln -sfhv $(realpath $<) $@
+	@ln -sfv $(realpath $<) $@
 	@test -L $@
 	@test -f $@
 	@diff $@ $<
