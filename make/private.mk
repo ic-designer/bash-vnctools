@@ -42,8 +42,8 @@ private_all: \
 	for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION).sh: \
-		src/vnctools/bash/vnctools-%.sh \
 		$(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh \
+		src/vnctools/bash/vnctools-%.sh \
 		| $(WORKDIR_BUILD)/$(PKGSUBDIR)/.
 	@$(build-merged-script)
 
