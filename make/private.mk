@@ -35,17 +35,17 @@ $(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh: | $(WORKDIR_PKGS)/.
 # Private targets
 .PHONY: private_all
 private_all: \
-		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-kill-$(VERSION).sh \
-		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-list-$(VERSION).sh \
-		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-open-$(VERSION).sh \
-		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-start-$(VERSION).sh
-	for f in $^; do test -f $${f}; done
+		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-kill-$(VERSION) \
+		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-list-$(VERSION) \
+		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-open-$(VERSION) \
+		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-start-$(VERSION)
+	@for f in $^; do test -f $${f}; done
 
-$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION).sh: \
+$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION): \
 		$(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh \
 		src/vnctools/bash/vnctools-%.sh \
 		| $(WORKDIR_BUILD)/$(PKGSUBDIR)/.
-	@$(build-merged-script)
+	$(call build-bash-executable, main) && test -f $@
 
 
 .PHONY: private_install
