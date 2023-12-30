@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 function main() {
     bashargs::add_required_value --display
     bashargs::add_required_value --geometry
@@ -14,10 +12,3 @@ function main() {
             -localhost
         vncserver -list"
 }
-
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    (
-        set -euo pipefail
-        main "$@"
-    )
-fi

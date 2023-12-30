@@ -69,7 +69,7 @@ $(DESTDIR)/$(BINSUBDIR)/vnctools-% : $(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSIO
 
 
 $(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION) : \
-		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION).sh
+		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
 	@install -dv $(dir $@)
 	@install -v -m 544 $< $@
 	@test -f $@
@@ -90,19 +90,9 @@ private_uninstall:
 
 
 .PHONY: private_test
-private_test : \
-		$(WAXWING) \
-		$(WORKDIR_TEST)/test-vnctools-kill-$(VERSION).merged.sh \
-		$(WORKDIR_TEST)/test-vnctools-list-$(VERSION).merged.sh \
-		$(WORKDIR_TEST)/test-vnctools-open-$(VERSION).merged.sh \
-		$(WORKDIR_TEST)/test-vnctools-start-$(VERSION).merged.sh
-	$(WAXWING) $(WORKDIR_TEST)
-
-$(WORKDIR_TEST)/test-vnctools-%-$(VERSION).merged.sh : \
- 		$(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION).sh \
-		test/vnctools/test-vnctools-%.sh \
-		| $(WORKDIR_TEST)/.
-	@$(build-merged-script)
+private_test : $(WAXWING)
+	@$(MAKE) install DESTDIR=$(abspath $(WORKDIR_TEST))
+	@PATH=$(abspath $(WORKDIR_TEST)/$(BINSUBDIR)):${PATH} $(WAXWING) test/vnctools
 
 
 .PHONY: private_clean
