@@ -79,14 +79,14 @@ $(DESTDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION) : \
 
 .PHONY: private_uninstall
 private_uninstall:
-	-\rm -fv $(DESTDIR)/$(PKGSUBDIR)/*
-	-\rm -dv $(DESTDIR)/$(PKGSUBDIR)
-	-\rm -dv $(dir $(DESTDIR)/$(PKGSUBDIR))
-	-\rm -dv $(DESTDIR)/$(LIBSUBDIR)
-	-\rm -v $(DESTDIR)/$(BINSUBDIR)/vnctools-*
-	-\rm -dv $(DESTDIR)/$(BINSUBDIR)
-	-\rm -dv $(DESTDIR)
-	test ! -e $(DESTDIR)/$(PKGSUBDIR)
+	@-\rm -fv $(DESTDIR)/$(PKGSUBDIR)/*
+	@-\rm -dv $(DESTDIR)/$(PKGSUBDIR)
+	@-\rm -dv $(dir $(DESTDIR)/$(PKGSUBDIR))
+	@-\rm -dv $(DESTDIR)/$(LIBSUBDIR)
+	@-\rm -v $(DESTDIR)/$(BINSUBDIR)/vnctools-*
+	@-\rm -dv $(DESTDIR)/$(BINSUBDIR)
+	@-\rm -dv $(DESTDIR)
+	@test ! -e $(DESTDIR)/$(PKGSUBDIR)
 
 
 .PHONY: private_test
