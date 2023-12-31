@@ -1,5 +1,5 @@
 DESTDIR:=~/.local
-override VERSION:=0.1.0+20231228
+override VERSION:=0.1.0
 
 .PHONY: all
 all: private_all

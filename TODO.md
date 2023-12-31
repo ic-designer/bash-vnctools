@@ -6,3 +6,4 @@
 3. Consider how to lock down dependency versions
 4. Consider how to split the makefile for clarity: test, dist, install, etc.
 5. Add a vnctools history file to keep track of the past N or so commands
+6. Autogenerate the VERSION used by make from the git repo using tags and the commit.

@@ -29,7 +29,7 @@ $(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh: | $(WORKDIR_PKGS)/.
 	$(call git-clone-shallow, \
 			git@github.com:ic-designer/bash-bashargs.git, \
 			$(WORKDIR_PKGS)/bash-bashargs, \
-			main)
+			0.1.1)
 
 
 # Private targets
