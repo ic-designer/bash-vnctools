@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- Removed the `bash` subdirectory from the `src` path layout.
+- Renamed the Makefile from `makefile` to `Makefile`.
+- Restructured the internal variables in the Makefile to simplify external variables.
+- Repo migrated from personal organization to `ic-designer` organization.
 ### Deprecated
 ### Fixed
 ### Security
