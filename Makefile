@@ -1,6 +1,15 @@
-DESTDIR:=~/.local
-override VERSION:=0.1.0
+# Config
+.DELETE_ON_ERROR:
+.SUFFIXES:
+MAKEFLAGS += --no-builtin-rules
 
+# Constants
+DESTDIR:=~/.local
+override NAME := bashargs
+override VERSION := $(shell git describe --always --dirty --broken)
+override WORKDIR_ROOT := $(CURDIR)/.make
+
+#Targets
 .PHONY: all
 all: private_all
 
@@ -25,21 +34,6 @@ test: private_test
 .PHONY: uninstall
 uninstall: private_uninstall
 
-
-# Config
-.DELETE_ON_ERROR:
-.SUFFIXES:
-MAKEFLAGS += --no-builtin-rules
-
-
-# Paths
-override BINSUBDIR:=bin
-override LIBSUBDIR:=lib
-
-override WORKDIR:=.make
-override WORKDIR_BUILD:=$(WORKDIR)/build
-override WORKDIR_PKGS:=$(WORKDIR)/pkgs
-override WORKDIR_TEST:=$(WORKDIR)/test
 
 # Includes
 include make/private.mk
