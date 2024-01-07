@@ -4,7 +4,7 @@
 ## Installation
 
 ```bash
-git clone git@github.com:jfredenburg/bash-vnctools.git bash-vnctools
+git clone git@github.com:ic-designer/bash-vnctools.git bash-vnctools
 make -C bash-vnctools/ install
 ```
 
