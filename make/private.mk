@@ -17,18 +17,17 @@ override WORKDIR_TEST = $(WORKDIR)/test
 include make/extras.mk
 
 # Dependencies
-WAXWING:=$(WORKDIR_PKGS)/waxwing/bin/waxwing
+WAXWING := $(WORKDIR_PKGS)/waxwing/bin/waxwing
 $(WAXWING): |$(WORKDIR_PKGS)/.
 	$(call git-clone-shallow, \
 			git@github.com:ic-designer/waxwing.git, \
-			$(WORKDIR_PKGS)/waxwing, \
-			main)
+			$(WORKDIR_PKGS)/waxwing, main)
 
-$(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh: | $(WORKDIR_PKGS)/.
+BASHARGS := $(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh
+$(BASHARGS): | $(WORKDIR_PKGS)/.
 	$(call git-clone-shallow, \
 			git@github.com:ic-designer/bash-bashargs.git, \
-			$(WORKDIR_PKGS)/bash-bashargs, \
-			0.1.1)
+			$(WORKDIR_PKGS)/bash-bashargs, 0.1.1)
 
 # Private targets
 .PHONY: private_all
@@ -40,7 +39,7 @@ private_all: \
 	@for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/$(PKGSUBDIR)/vnctools-%-$(VERSION): \
-		$(WORKDIR_PKGS)/bash-bashargs/src/bashargs/bashargs.sh \
+		$(BASHARGS) \
 		src/vnctools/vnctools-%.sh \
 		| $(WORKDIR_BUILD)/$(PKGSUBDIR)/.
 	$(call build-bash-executable, main) && test -f $@
