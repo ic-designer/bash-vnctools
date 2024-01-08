@@ -9,10 +9,6 @@ PREFIX = $(HOME)/.local
 BINDIR = $(PREFIX)/bin
 LIBDIR = $(PREFIX)/lib
 
-override NAME := vnctools
-override VERSION := $(shell git describe --always --dirty --broken)
-override WORKDIR_ROOT := $(CURDIR)/.make
-
 #Targets
 .PHONY: all
 all: private_all
