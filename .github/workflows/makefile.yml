@@ -24,13 +24,23 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Run check
-      run: make check
+      run: |
+        make clean
+        make check
 
     - name: Run test
-      run: make test
+      run: |
+        make clean
+        make test
 
-    - name: Run mock install and uninstall
-      run: make clean install uninstall DESTDIR=.make/local
+    - name: Run staged install and uninstall
+      run: |
+        make clean
+        make install DESTDIR=.make PREFIX=local
+        make uninstall DESTDIR=.make PREFIX=local
 
     - name: Run install and uninstall
-      run: make clean install uninstall
+      run: |
+        make clean
+        make install
+        make uninstall
