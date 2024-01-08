@@ -61,4 +61,4 @@ endef
 
 .PRECIOUS: %/.
 %/. :
-	@mkdir -p $@
+	@install -dv $@
