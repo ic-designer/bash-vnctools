@@ -24,11 +24,12 @@ $(WAXWING): |$(WORKDIR_DEPS)/.
 			git@github.com:ic-designer/waxwing.git, \
 			$(WORKDIR_DEPS)/waxwing, main)
 
-BASHARGS := $(WORKDIR_DEPS)/bash-bashargs/src/bashargs/bashargs.sh
-$(BASHARGS): | $(WORKDIR_DEPS)/.
+$(WORKDIR_BUILD)/bashargs/bashargs.sh: | $(WORKDIR_DEPS)/.
 	$(call git-clone-shallow, \
 			git@github.com:ic-designer/bash-bashargs.git, \
-			$(WORKDIR_DEPS)/bash-bashargs, 0.1.1)
+			$(WORKDIR_DEPS)/bash-bashargs, 0.2.0)
+	$(MAKE) -C $(WORKDIR_DEPS)/bash-bashargs install DESTDIR=$(abspath $(WORKDIR_BUILD)) LIBDIR=
+	test -f $@
 
 # Private targets
 .PHONY: private_all
@@ -39,7 +40,9 @@ private_all: \
 		$(WORKDIR_BUILD)/vnctools-start-$(VERSION)
 	@for f in $^; do test -f $${f}; done
 
-$(WORKDIR_BUILD)/vnctools-%-$(VERSION): $(BASHARGS) src/vnctools/vnctools-%.sh
+$(WORKDIR_BUILD)/vnctools-%-$(VERSION): \
+		$(WORKDIR_BUILD)/bashargs/bashargs.sh \
+		src/vnctools/vnctools-%.sh
 	$(call build-bash-executable, main)
 
 
