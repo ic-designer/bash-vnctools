@@ -14,22 +14,30 @@ override WORKDIR_ROOT := $(CURDIR)/.make
 override WORKDIR_TEST = $(WORKDIR)/test
 
 # Includes
-include make/extras.mk
+BOXERBIRD.MK := $(WORKDIR_DEPS)/boxerbird/boxerbird.mk
+$(BOXERBIRD.MK):
+	@echo "Loading Boxerbird..."
+	git clone --config advice.detachedHead=false \
+		git@github.com:ic-designer/make-boxerbird.git --branch 0.1.0 $(dir $@)
+	@echo
+-include $(BOXERBIRD.MK)
 
 # Dependencies
 WAXWING := $(WORKDIR_DEPS)/waxwing/bin/waxwing
-$(WAXWING): |$(WORKDIR_DEPS)/.
-	$(call git-clone-shallow, \
-			git@github.com:ic-designer/waxwing.git, \
-			$(WORKDIR_DEPS)/waxwing, main)
+$(WAXWING):
+	@echo "Loading Waxwing..."
+	git clone --config advice.detachedHead=false \
+		git@github.com:ic-designer/bash-waxwing.git --branch main $(WORKDIR_DEPS)/waxwing
+	@echo
 
 BASHARGS := $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
-$(BASHARGS): |$(WORKDIR_DEPS)/.
-	$(call git-clone-shallow, \
-			git@github.com:ic-designer/bash-bashargs.git, \
-			$(WORKDIR_DEPS)/bash-bashargs, 0.2.0)
-	$(MAKE) -C $(WORKDIR_DEPS)/bash-bashargs install DESTDIR=$(abspath $(WORKDIR_BUILD)) LIBDIR=lib
+$(BASHARGS):
+	@echo "Installing bashargs..."
+	git clone --config advice.detachedHead=false \
+		git@github.com:ic-designer/bash-bashargs.git --branch 0.2.0 $(WORKDIR_DEPS)/bashargs
+	$(MAKE) -C $(WORKDIR_DEPS)/bashargs install DESTDIR=$(abspath $(WORKDIR_BUILD)) LIBDIR=lib
 	test -f $@
+	@echo
 
 # Private targets
 .PHONY: private_all
@@ -43,7 +51,7 @@ private_all: \
 $(WORKDIR_BUILD)/vnctools-%-$(VERSION): \
 		$(BASHARGS) \
 		src/vnctools/vnctools-%.sh
-	$(call build-bash-executable, main)
+	$(call boxerbird::build-bash-executable, main)
 
 
 .PHONY: private_clean
@@ -69,10 +77,10 @@ private_install: \
 		$(DESTDIR)/$(BINDIR)/vnctools-start
 
 $(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
-	$(call install-as-link)
+	$(call boxerbird::install-as-link)
 
 $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION): $(WORKDIR_BUILD)/vnctools-%-$(VERSION)
-	$(call install-as-executable)
+	$(call boxerbird::install-as-executable)
 
 
 .PHONY: private_test
@@ -90,15 +98,3 @@ private_uninstall:
 	@\rm -v $(DESTDIR)/$(BINDIR)/vnctools-* 2> /dev/null || true
 	@\rm -dv $(DESTDIR)/$(BINDIR) 2> /dev/null || true
 	@\rm -dv $(DESTDIR) 2> /dev/null || true
-
-
-.PHONY: private_pkg_list
-private_pkg_list:
-	$(call git-list-remotes, $(WORKDIR_DEPS))
-
-
-.PHONY: private_pkg_override
-private_pkg_override: REPO_NAME ?= $(error ERROR: Name not defined. Please defined REPO_NAME=<name>)
-private_pkg_override: REPO_PATH ?= $(error ERROR: Repo not defined. Please defined REPO_PATH=<path>)
-private_pkg_override:
-	$(call git-clone-shallow, $(REPO_PATH), $(WORKDIR_DEPS)/$(REPO_NAME))

@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed the Makefile from `makefile` to `Makefile`.
 - Removed the `pkg_list` and `pkg_override` targets.
 - Restructured Makefile internal variables to reduce the number of variables.
+- Shared makefile utilities are now cloned from the Boxerbird repo
 - Removed the `bash` subdirectory from the `src` path layout.
 ### Deprecated
 ### Fixed
