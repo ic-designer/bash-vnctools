@@ -10,17 +10,20 @@ define build-bash-executable
 	@echo '        $(strip $(1)) "$$@"'  >> $@
     @echo '    )'  >> $@
 	@echo 'fi'  >> $@
+	@echo
 endef
 
 define build-bash-library
 	@echo 'Bulding library $@'
 	@mkdir -p $(dir $@)
 	@cat $^ > $@
+	@echo
 endef
 
 define git-clone-shallow
 	$(if $(wildcard $2), rm -rf $2)
-	@git clone -qv --depth=1 $1 $2 $(if $3, --branch $3)
+	git clone -qv --depth=1 $1 $2 $(if $3, --branch $3)
+	@echo
 endef
 
 define git-list-remotes
@@ -34,14 +37,16 @@ define install-as-copy
 	@install -Sv $< $@
 	test -f $@
 	diff $@ $<
+	@echo
 endef
 
 define install-as-executable
 	@install -dv $(dir $@)
-	@install -Sv $< $@
+	@install -Sv -m 544 $< $@
 	test -f $@
 	test -x $@
 	diff $@ $<
+	@echo
 endef
 
 define install-as-link
@@ -50,6 +55,7 @@ define install-as-link
 	test -L $@
 	test -f $@
 	diff $@ $<
+	@echo
 endef
 
 
