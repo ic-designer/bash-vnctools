@@ -15,8 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [0.2.0] - 2024-01-08
+## [Unreleased] - YYYY-MM-DD
+### Added
+### Changed
+### Deprecated
+### Fixed
+### Security
 
+
+## [0.2.0] - 2024-01-08
 ### Changed
 - Repo migrated from personal organization to `ic-designer` organization.
 - Renamed the Makefile from `makefile` to `Makefile`.
@@ -29,9 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   make target as a seperate command.
 
 
-
 ## [0.1.0] - 2023-12-30
-
 ### Added
 - Executable bash scripts to manage vnc connections from macos to linux using x11vnc and port forwarding.
 - Test scripts
