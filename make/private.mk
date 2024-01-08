@@ -75,23 +75,10 @@ $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION): $(WORKDIR_BUILD)/vnctoo
 	$(call install-as-executable)
 
 
-.PHONY: private_pkg_list
-private_pkg_list:
-	$(call git-list-remotes, $(WORKDIR_DEPS))
-
-
-.PHONY: private_pkg_override
-private_pkg_override: REPO_NAME ?= $(error ERROR: Name not defined. Please defined REPO_NAME=<name>)
-private_pkg_override: REPO_PATH ?= $(error ERROR: Repo not defined. Please defined REPO_PATH=<path>)
-private_pkg_override:
-	$(call git-clone-shallow, $(REPO_PATH), $(WORKDIR_DEPS)/$(REPO_NAME))
-
-
 .PHONY: private_test
 private_test : $(WAXWING)
 	@$(MAKE) install DESTDIR=$(abspath $(WORKDIR_TEST))
 	@PATH=$(abspath $(WORKDIR_TEST)/$(BINDIR)):${PATH} $(WAXWING) test/vnctools
-
 
 
 .PHONY: private_uninstall
@@ -103,3 +90,15 @@ private_uninstall:
 	@\rm -v $(DESTDIR)/$(BINDIR)/vnctools-* 2> /dev/null || true
 	@\rm -dv $(DESTDIR)/$(BINDIR) 2> /dev/null || true
 	@\rm -dv $(DESTDIR) 2> /dev/null || true
+
+
+.PHONY: private_pkg_list
+private_pkg_list:
+	$(call git-list-remotes, $(WORKDIR_DEPS))
+
+
+.PHONY: private_pkg_override
+private_pkg_override: REPO_NAME ?= $(error ERROR: Name not defined. Please defined REPO_NAME=<name>)
+private_pkg_override: REPO_PATH ?= $(error ERROR: Repo not defined. Please defined REPO_PATH=<path>)
+private_pkg_override:
+	$(call git-clone-shallow, $(REPO_PATH), $(WORKDIR_DEPS)/$(REPO_NAME))
