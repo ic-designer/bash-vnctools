@@ -15,9 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [Unreleased] - YYYY-MM-DD
+## [0.2.0] - 2024-01-08
 
-### Added
 ### Changed
 - Repo migrated from personal organization to `ic-designer` organization.
 - Renamed the Makefile from `makefile` to `Makefile`.
@@ -25,11 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restructured Makefile internal variables to reduce the number of variables.
 - Shared makefile utilities are now cloned from the Boxerbird repo
 - Removed the `bash` subdirectory from the `src` path layout.
-### Deprecated
 ### Fixed
 - Corrected issue with GitHub workflow where make target were not properly ran by calling each
   make target as a seperate command.
-### Security
+
 
 
 ## [0.1.0] - 2023-12-30
