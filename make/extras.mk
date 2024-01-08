@@ -22,7 +22,7 @@ endef
 
 define git-clone-shallow
 	$(if $(wildcard $2), rm -rf $2)
-	git clone -qv --depth=1 $1 $2 $(if $3, --branch $3)
+	git clone -v --depth=1 --config advice.detachedHead=false $1 $2 $(if $3, --branch $3)
 	@echo
 endef
 
