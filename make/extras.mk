@@ -1,5 +1,6 @@
 define build-bash-executable
 	@echo 'Bulding executable $@'
+	@mkdir -p $(dir $@)
 	@echo '#!/usr/bin/env bash\n' > $@
 	@cat $^ >> $@
 	@echo >> $@
@@ -13,6 +14,7 @@ endef
 
 define build-bash-library
 	@echo 'Bulding library $@'
+	@mkdir -p $(dir $@)
 	@cat $^ > $@
 endef
 
