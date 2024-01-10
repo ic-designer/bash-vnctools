@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ```markdown
 ## [Unreleased] - YYYY-MM-DD
-
 ### Added
 ### Changed
 ### Deprecated
@@ -18,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 ### Added
 ### Changed
+- Removed the version string from the vnctool scripts.
+- Removed the version string from the install directories to simplify uninstall
 ### Deprecated
 ### Fixed
 ### Security
