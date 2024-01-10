@@ -30,12 +30,12 @@ $(WAXWING):
 		git@github.com:ic-designer/bash-waxwing.git --branch main $(WORKDIR_DEPS)/waxwing
 	@echo
 
-BASHARGS := $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
-$(BASHARGS):
-	@echo "Installing bashargs..."
-	git clone --config advice.detachedHead=false \
-		git@github.com:ic-designer/bash-bashargs.git --branch 0.2.1 $(WORKDIR_DEPS)/bashargs
-	$(MAKE) -C $(WORKDIR_DEPS)/bashargs install DESTDIR=$(abspath $(WORKDIR_BUILD)) LIBDIR=lib
+BASHARGS.SH := $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
+BASHARGS_VERSION := 0.2.1
+$(BASHARGS.SH): |$(WORKDIR_DEPS)/.
+	@echo "Loading bashargs..."
+	curl -sL https://github.com/ic-designer/bash-bashargs/archive/refs/tags/$(BASHARGS_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
+	$(MAKE) -C $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION) install DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib
 	test -f $@
 	@echo
 
@@ -49,7 +49,7 @@ private_all: \
 	@for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/vnctools-%-$(VERSION): \
-		$(BASHARGS) \
+		$(BASHARGS.SH) \
 		src/vnctools/vnctools-%.sh
 	$(call boxerbird::build-bash-executable, main)
 
