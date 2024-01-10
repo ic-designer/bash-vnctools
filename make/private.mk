@@ -14,13 +14,15 @@ override WORKDIR_ROOT := $(CURDIR)/.make
 override WORKDIR_TEST = $(WORKDIR)/test
 
 # Includes
-BOXERBIRD.MK := $(WORKDIR_DEPS)/boxerbird/boxerbird.mk
+BOXERBIRD_VERSION := 0.1.0
+BOXERBIRD.MK = $(WORKDIR_DEPS)/make-boxerbird-$(BOXERBIRD_VERSION)/boxerbird.mk
 $(BOXERBIRD.MK):
-	@echo "Loading Boxerbird..."
-	git clone --config advice.detachedHead=false \
-		git@github.com:ic-designer/make-boxerbird.git --branch 0.1.0 $(dir $@)
+	@echo "Loading boxerbird..."
+	mkdir -p $(WORKDIR_DEPS)
+	curl -sL https://github.com/ic-designer/make-boxerbird/archive/refs/tags/$(BOXERBIRD_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
+	test -f $@
 	@echo
--include $(BOXERBIRD.MK)
+include $(BOXERBIRD.MK)
 
 # Dependencies
 WAXWING := $(WORKDIR_DEPS)/waxwing/bin/waxwing
