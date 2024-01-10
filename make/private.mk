@@ -44,13 +44,13 @@ $(BASHARGS.SH): |$(WORKDIR_DEPS)/.
 # Private targets
 .PHONY: private_all
 private_all: \
-		$(WORKDIR_BUILD)/vnctools-kill-$(VERSION) \
-		$(WORKDIR_BUILD)/vnctools-list-$(VERSION) \
-		$(WORKDIR_BUILD)/vnctools-open-$(VERSION) \
-		$(WORKDIR_BUILD)/vnctools-start-$(VERSION)
+		$(WORKDIR_BUILD)/vnctools-kill \
+		$(WORKDIR_BUILD)/vnctools-list \
+		$(WORKDIR_BUILD)/vnctools-open \
+		$(WORKDIR_BUILD)/vnctools-start
 	@for f in $^; do test -f $${f}; done
 
-$(WORKDIR_BUILD)/vnctools-%-$(VERSION): \
+$(WORKDIR_BUILD)/vnctools-%: \
 		$(BASHARGS.SH) \
 		src/vnctools/vnctools-%.sh
 	$(call boxerbird::build-bash-executable, main)
@@ -69,19 +69,19 @@ private_clean:
 
 .PHONY: private_install
 private_install: \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-kill-$(VERSION) \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-list-$(VERSION) \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-open-$(VERSION) \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-start-$(VERSION) \
+		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-kill \
+		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-list \
+		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-open \
+		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-start \
 		$(DESTDIR)/$(BINDIR)/vnctools-kill \
 		$(DESTDIR)/$(BINDIR)/vnctools-list \
 		$(DESTDIR)/$(BINDIR)/vnctools-open \
 		$(DESTDIR)/$(BINDIR)/vnctools-start
 
-$(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION)
+$(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
 	$(call boxerbird::install-as-link)
 
-$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%-$(VERSION): $(WORKDIR_BUILD)/vnctools-%-$(VERSION)
+$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
 	$(call boxerbird::install-as-executable)
 
 
