@@ -42,12 +42,10 @@ $(BASHARGS.SH): |$(WORKDIR_DEPS)/.
 	@echo
 
 # Private targets
+override VNCTOOL_LIST := vnctools-kill vnctools-list vnctools-open vnctools-start
+
 .PHONY: private_all
-private_all: \
-		$(WORKDIR_BUILD)/vnctools-kill \
-		$(WORKDIR_BUILD)/vnctools-list \
-		$(WORKDIR_BUILD)/vnctools-open \
-		$(WORKDIR_BUILD)/vnctools-start
+private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
 	@for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/vnctools-%: \
@@ -69,14 +67,8 @@ private_clean:
 
 .PHONY: private_install
 private_install: \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-kill \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-list \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-open \
-		$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-start \
-		$(DESTDIR)/$(BINDIR)/vnctools-kill \
-		$(DESTDIR)/$(BINDIR)/vnctools-list \
-		$(DESTDIR)/$(BINDIR)/vnctools-open \
-		$(DESTDIR)/$(BINDIR)/vnctools-start
+		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/$(TOOL)) \
+		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(BINDIR)/$(TOOL))
 
 $(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
 	$(call boxerbird::install-as-link)
