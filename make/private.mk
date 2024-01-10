@@ -27,9 +27,9 @@ include $(BOXERBIRD.MK)
 # Dependencies
 WAXWING := $(WORKDIR_DEPS)/waxwing/bin/waxwing
 $(WAXWING):
-	@echo "Loading Waxwing..."
-	git clone --config advice.detachedHead=false \
-		git@github.com:ic-designer/bash-waxwing.git --branch main $(WORKDIR_DEPS)/waxwing
+	@echo "Loading waxwing..."
+	git clone --config advice.detachedHead=false git@github.com:ic-designer/bash-waxwing.git --branch main $(WORKDIR_DEPS)/waxwing
+	test -f $@
 	@echo
 
 BASHARGS.SH := $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
