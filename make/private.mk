@@ -13,32 +13,8 @@ override WORKDIR_DEPS = $(WORKDIR_ROOT)/deps
 override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
 
 # Includes
-BOXERBIRD_VERSION := 0.1.0
-BOXERBIRD.MK = $(WORKDIR_DEPS)/make-boxerbird-$(BOXERBIRD_VERSION)/boxerbird.mk
-$(BOXERBIRD.MK):
-	@echo "Loading boxerbird..."
-	mkdir -p $(WORKDIR_DEPS)
-	curl -sL https://github.com/ic-designer/make-boxerbird/archive/refs/tags/$(BOXERBIRD_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
-	test -f $@
-	@echo
+include make/deps.mk
 include $(BOXERBIRD.MK)
-
-# Dependencies
-WAXWING := $(WORKDIR_DEPS)/waxwing/bin/waxwing
-$(WAXWING):
-	@echo "Loading waxwing..."
-	git clone --config advice.detachedHead=false git@github.com:ic-designer/bash-waxwing.git --branch main $(WORKDIR_DEPS)/waxwing
-	test -f $@
-	@echo
-
-BASHARGS.SH := $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
-BASHARGS_VERSION := 0.2.1
-$(BASHARGS.SH): |$(WORKDIR_DEPS)/.
-	@echo "Loading bashargs..."
-	curl -sL https://github.com/ic-designer/bash-bashargs/archive/refs/tags/$(BASHARGS_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
-	$(MAKE) -C $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION) install DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib
-	test -f $@
-	@echo
 
 # Private targets
 override VNCTOOL_LIST := vnctools-kill vnctools-list vnctools-open vnctools-start
@@ -48,9 +24,17 @@ private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
 	@for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/vnctools-%: \
-		$(BASHARGS.SH) \
+		$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh \
 		src/vnctools/vnctools-%.sh
 	$(call boxerbird::build-bash-executable, main)
+
+
+$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh: $(BASHARGS_REPO)
+	@echo "Building bashargs..."
+	$(MAKE) -C $(BASHARGS_REPO) install \
+			DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib WORKDIR_ROOT=$(WORKDIR_ROOT)
+	test -f $@
+	@echo
 
 
 .PHONY: private_clean

@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [Unreleased] - YYYY-MM-DD
+### Added
+- Version for dependencies can be controlled with the following variables: `BASHARGS_VERSION`,
+  `BOXERBIRD_BRANCH`, and `WAXWING_BRANCH`.
+### Changed
+### Deprecated
+### Fixed
+### Security
+
+
 ## [0.3.0] - 2024-01-09
 ### Changed
 - Removed the version string from the vnctool scripts.
