@@ -14,14 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [Unreleased] - YYYY-MM-DD
+## [0.3.1] - 2024-01-10
 ### Added
 - Version for dependencies can be controlled with the following variables: `BASHARGS_VERSION`,
   `BOXERBIRD_BRANCH`, and `WAXWING_BRANCH`.
+- The Makefile variable `WORKDIR_ROOT`` can now be overidden on the command line.
 ### Changed
-### Deprecated
-### Fixed
-### Security
+- Build dependencies are now populated under `$(WORKDIR_ROOT)/deps/`.
+- Build artifacts are now populated under `$(WORKDIR_ROOT)/build/`.
+- Test artifacts are now populated under`$(WORKDIR_ROOT)/test/`.
 
 
 ## [0.3.0] - 2024-01-09
