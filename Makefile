@@ -8,6 +8,7 @@ DESTDIR =
 PREFIX = $(HOME)/.local
 BINDIR = $(PREFIX)/bin
 LIBDIR = $(PREFIX)/lib
+WORKDIR_ROOT := $(CURDIR)/.make
 
 #Targets
 .PHONY: all
