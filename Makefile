@@ -1,8 +1,3 @@
-# Config
-.DELETE_ON_ERROR:
-.SUFFIXES:
-MAKEFLAGS += --no-builtin-rules
-
 # Constants
 DESTDIR =
 PREFIX = $(HOME)/.local

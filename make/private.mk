@@ -1,3 +1,8 @@
+# Config
+.DELETE_ON_ERROR:
+.SUFFIXES:
+MAKEFLAGS += --no-builtin-rules
+
 # Constants
 DESTDIR ?= $(error ERROR: Undefined variable DESTDIR)
 PREFIX ?= $(error ERROR: Undefined variable PREFIX)
