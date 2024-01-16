@@ -23,7 +23,7 @@ include test/makefile/test-makefile.mk
 include test/vnctools/test-vnctools.mk
 include $(BOXERBIRD.MK)
 
-# Private targets
+# Targets
 override VNCTOOL_LIST := vnctools-kill vnctools-list vnctools-open vnctools-start
 
 .PHONY: private_all
@@ -34,7 +34,6 @@ $(WORKDIR_BUILD)/vnctools-%: \
 		$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh \
 		src/vnctools/vnctools-%.sh
 	$(call boxerbird::build-bash-executable, main)
-
 
 $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh: $(BASHARGS_REPO)
 	@echo "Building bashargs..."
