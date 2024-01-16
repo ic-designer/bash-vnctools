@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [Unreleased] - YYYY-MM-DD
+### Added
+- Created tests for the Makefile.
+### Changed
+- Makefile configuration settings moved to `private.mk`.
+### Deprecated
+### Fixed
+### Security
+
+
 ## [0.3.1] - 2024-01-10
 ### Added
 - Version for dependencies can be controlled with the following variables: `BASHARGS_VERSION`,
