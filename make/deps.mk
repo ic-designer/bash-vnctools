@@ -12,6 +12,7 @@ $(BOXERBIRD.MK):
 	git clone --config advice.detachedHead=false --depth 1 \
 			https://github.com/ic-designer/make-boxerbird.git --branch $(BOXERBIRD_BRANCH) \
 			$(WORKDIR_DEPS)/make-boxerbird
+	test -f $@
 	@echo
 
 override BASHARGS_REPO := $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION)
@@ -28,4 +29,5 @@ $(WAXWING):
 	git clone  --config advice.detachedHead=false --depth 1 \
 			https://github.com/ic-designer/bash-waxwing.git --branch $(WAXWING_BRANCH) \
 			$(WORKDIR_DEPS)/bash-waxwing
+	test -f $@
 	@echo
