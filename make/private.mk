@@ -19,6 +19,8 @@ override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
 
 # Includes
 include make/deps.mk
+include test/makefile/test-makefile.mk
+include test/vnctools/test-vnctools.mk
 include $(BOXERBIRD.MK)
 
 # Private targets
@@ -65,9 +67,7 @@ $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
 
 
 .PHONY: private_test
-private_test : $(WAXWING)
-	@$(MAKE) install DESTDIR=$(abspath $(WORKDIR_TEST))
-	@PATH=$(abspath $(WORKDIR_TEST)/$(BINDIR)):${PATH} $(WAXWING) test/vnctools
+private_test : test-makefile test-vnctools
 
 
 .PHONY: private_uninstall
