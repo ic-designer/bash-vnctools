@@ -4,8 +4,8 @@
 ## Installation
 
 ```bash
-curl -sL https://github.com/ic-designer/bash-vnctools/archive/refs/tags/0.3.0.tar.gz | tar xz
-make -C bash-vnctools-0.3.0 install
+curl -sL https://github.com/ic-designer/bash-vnctools/archive/refs/tags/0.3.2.tar.gz | tar xz
+make -C bash-vnctools-0.3.2 install
 ```
 
 ## Commands

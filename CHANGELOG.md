@@ -14,14 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [Unreleased] - YYYY-MM-DD
+## [0.3.2] - 2024-01-16
 ### Added
 - Created tests for the Makefile.
 ### Changed
 - Makefile configuration settings moved to `private.mk`.
-### Deprecated
-### Fixed
-### Security
+- Updated bashargs to 0.3.1.
 
 
 ## [0.3.1] - 2024-01-10
