@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [0.3.3] - 2024-01-18
+### Fixed
+- Fixed bug where port mismatches can occur between the forwared tunnel port and x11vnc port.
+
+
 ## [0.3.2] - 2024-01-16
 ### Added
 - Created tests for the Makefile.

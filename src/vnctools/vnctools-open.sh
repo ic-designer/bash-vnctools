@@ -17,7 +17,7 @@ function main() {
     ssh  -4CKq -L $(bashargs::get_arg --localport):localhost:5900  \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         "x11vnc \
-            -display :$(bashargs::get_arg --display) -localhost \
+            -display :$(bashargs::get_arg --display) -localhost -rfbport $(bashargs::get_arg --localport) \
             -usepw -once -noxdamage -snapfb -speeds dsl -shared -repeat -forever" &
 
     sleep 4
