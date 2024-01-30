@@ -14,11 +14,11 @@ function main() {
     }
 
     trap "clean_up; exit 1" INT
-    ssh  -4CKq -L $(bashargs::get_arg --localport):localhost:5900  \
+    ssh  -4CKqf -L $(bashargs::get_arg --localport):localhost:5900  \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         "x11vnc \
             -display :$(bashargs::get_arg --display) -localhost -rfbport $(bashargs::get_arg --localport) \
-            -usepw -once -noxdamage -snapfb -speeds dsl -shared -repeat -forever" &
+            -usepw -once -noxdamage -snapfb -speeds dsl -shared -repeat -forever"
 
     sleep 4
     case true in
