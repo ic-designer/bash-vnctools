@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [0.3.4] - 2024-01-30
+### Fixed
+- Fixed bug where x11vnc blocks ports after repeated usage. This may be the real issue that was
+  attempted to be fixed by patch 0.3.3.
+- The `vnctools-open` command will now attempt to remove background x11vnc process in `cleanup()`
+
+
 ## [0.3.3] - 2024-01-18
 ### Fixed
 - Fixed bug where port mismatches can occur between the forwared tunnel port and x11vnc port.
