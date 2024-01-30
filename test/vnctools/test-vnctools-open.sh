@@ -49,9 +49,8 @@ function test_vnctools_open_with_valid_args_and_default_options() {
     actual=$(waxwing::read_pipe)
     expected=$(cat << EOF
 trap clean_up; exit 1 INT
-ssh -4CKq -L localport:localhost:5900 username@hostname x11vnc -display :display -localhost -rfbport localport -usepw -once -noxdamage -snapfb -speeds dsl -shared -repeat -forever
+ssh -4CKqf -L localport:localhost:5900 username@hostname x11vnc -display :display -localhost -rfbport localport -usepw -once -noxdamage -snapfb -speeds dsl -shared -repeat -forever
 open -W vnc://localhost:localport
-kill
 EOF
 )
     [[ ${actual} == ${expected} ]]
