@@ -1,4 +1,4 @@
-function test_vnctools_list_missing_display() {
+function test_vnctools_open_missing_display() {
     local return_code=0
     $(vnctools-open \
         --hostname= \
@@ -8,7 +8,7 @@ function test_vnctools_list_missing_display() {
     [[ $return_code -eq 1 ]]
 }
 
-function test_vnctools_list_missing_hostname() {
+function test_vnctools_open_missing_hostname() {
     local return_code=0
     $(vnctools-open \
         --display= \
@@ -18,7 +18,7 @@ function test_vnctools_list_missing_hostname() {
     [[ $return_code -eq 1 ]]
 }
 
-function test_vnctools_list_missing_localport() {
+function test_vnctools_open_missing_localport() {
     local return_code=0
     $(vnctools-open \
         --display= \
@@ -28,7 +28,7 @@ function test_vnctools_list_missing_localport() {
     [[ $return_code -eq 1 ]]
 }
 
-function test_vnctools_list_missing_username() {
+function test_vnctools_open_missing_username() {
     local return_code=0
     $(vnctools-open \
         --display= \
@@ -38,7 +38,7 @@ function test_vnctools_list_missing_username() {
     [[ $return_code -eq 1 ]]
 }
 
-function test_vnctools_list_with_valid_args_and_default_options() {
+function test_vnctools_open_with_valid_args_and_default_options() {
     waxwing::monkey_patch_commands_to_record_command_name_only kill
     waxwing::monkey_patch_commands_to_record_command_name_and_args open ssh trap
     vnctools-open \
