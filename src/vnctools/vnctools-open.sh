@@ -8,6 +8,9 @@ function main() {
     bashargs::parse_args $@
 
     clean_up () {
+        ssh  -4CKfq -L $(bashargs::get_arg --localport):localhost:5900  \
+            $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
+            $(printf 'kill -9 $(pgrep -f x11vnc.*%s)' "$(bashargs::get_arg --localport)" )
         for job in `jobs -p`; do
             kill ${job}
         done
