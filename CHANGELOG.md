@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `-q` option from `ssh` so command will show error messages.
 - The `-noshm` option is added to `x11vnc` command in `vnctools-open` command to fix error with
   `shmget` unable to access memory.
+- Fixed issue where `make clean` didn't remove the `.waxwing` directory.
 
 
 ## [0.3.4] - 2024-01-30

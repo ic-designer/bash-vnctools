@@ -14,6 +14,7 @@ check: private_test
 
 .PHONY: clean
 clean: private_clean
+	@$(if $(wildcard .waxwing), rm -rfv .waxwing)
 
 .PHONY: install
 install: private_install
