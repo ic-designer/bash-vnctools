@@ -18,7 +18,7 @@ function main() {
     }
 
     trap "clean_up; exit 1" INT
-    ssh  -4CKqf -L $(bashargs::get_arg --localport):localhost:5900  \
+    ssh  -4CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:5900  \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         "x11vnc \
             -display :$(bashargs::get_arg --display) -localhost -noshm \
