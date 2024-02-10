@@ -50,11 +50,11 @@ function test_vnctools_open_with_valid_args_and_default_options() {
     expected=$(cat << EOF
 trap clean_up; exit 1 INT
 trap echo "ERROR: \$(caller)" >&2 ERR
+ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname kill -9 \$(pgrep -f x11vnc.*localport)
 ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname x11vnc \
--display :display -localhost -noshm -rfbport localport -usepw -once -noxdamage -snapfb \
--speeds dsl -shared -repeat -forever
+-display :display -rfbport localport -localhost -noshm -usepw -once -noxdamage -snapfb \
+-speeds dsl -repeat
 open -W vnc://localhost:localport
-ssh -4CKfq -L localport:localhost:5900 username@hostname kill -9 \$(pgrep -f x11vnc.*localport)
 EOF
 )
     [[ ${actual} == ${expected} ]]
@@ -73,11 +73,11 @@ function test_vnctools_open_with_valid_args_and_x11vnc_options() {
     expected=$(cat << EOF
 trap clean_up; exit 1 INT
 trap echo "ERROR: \$(caller)" >&2 ERR
+ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname kill -9 \$(pgrep -f x11vnc.*localport)
 ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname x11vnc \
--display :display -localhost -noshm -rfbport localport -usepw -once -noxdamage -snapfb \
--speeds dsl -shared -repeat -forever alpha beta --gamma
+-display :display -rfbport localport -localhost -noshm -usepw -once -noxdamage -snapfb \
+-speeds dsl -repeat alpha beta --gamma
 open -W vnc://localhost:localport
-ssh -4CKfq -L localport:localhost:5900 username@hostname kill -9 \$(pgrep -f x11vnc.*localport)
 EOF
 )
     [[ ${actual} == ${expected} ]]
