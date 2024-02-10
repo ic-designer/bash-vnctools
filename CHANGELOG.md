@@ -14,10 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [Unreleased] - 2024-01-30
+## [0.4.0] - 2024-02-12
 ### Added
 - Added the optional argument `--x11vnc="<args>"` to `vnctools-open` so x11vnc issues can debugged
   without modifying the `vnctools-open` script.
+- Added an error trap to the `vnctools-open` script to increase verbosity during errors.
 - Added the required argument `--remoteport` to `vnctools-open` to control which port that x11vnc
   uses to forward the display.
 - Created the command `vnctools-history` to record invocations of the `vnctools` commands.

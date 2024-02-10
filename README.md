@@ -4,8 +4,8 @@
 ## Installation
 
 ```bash
-curl -sL https://github.com/ic-designer/bash-vnctools/archive/refs/tags/0.3.4.tar.gz | tar xz
-make -C bash-vnctools-0.3.4 install
+curl -sL https://github.com/ic-designer/bash-vnctools/archive/refs/tags/0.4.0.tar.gz | tar xz
+make -C bash-vnctools-0.4.0 install
 ```
 
 ## Commands
@@ -54,7 +54,8 @@ Opens the remote vnc desktop using an ssh tunnel.
 usage: vnctools-open --username=<username> --hostname=<hostname>
                      --localport=<localport> --remoteport=<remoteport>
                      --display=<display>
-                    [ --realvnc | --screenshare ]
+                    [--realvnc | --screenshare]
+                    [--sleep=<time>] [--x11args="<list of args>"]
 
         --username=<username>       <username> provided to ssh
         --hostname=<hostname>       <hostname> provided to ssh
@@ -63,8 +64,8 @@ usage: vnctools-open --username=<username> --hostname=<hostname>
         --display=<display>         desktop <display> number
         --realvnc                   open the desktop using realVNC app
         --screenshare               open the desktop using OSX screenshare app
-        --x11vnc="<args> ..."       <args> passed directly to x11vnc
-
+        --sleep=<time>              <time> in seconds to wait between commands [Default: 4]
+        --x11vnc="<list of args>"   <list of args> passed through to x11vnc [Default: ""]
 ```
 
 
