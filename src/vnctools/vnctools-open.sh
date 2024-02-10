@@ -5,7 +5,8 @@ function main() {
     bashargs::add_required_value --localport
     bashargs::add_optional_flag --realvnc
     bashargs::add_optional_flag --screenshare
-    bashargs::parse_args $@
+    bashargs::add_optional_value --x11vnc
+    bashargs::parse_args "$@"
 
     clean_up () {
         ssh  -4CKfq -L $(bashargs::get_arg --localport):localhost:5900  \
@@ -20,8 +21,10 @@ function main() {
     ssh  -4CKqf -L $(bashargs::get_arg --localport):localhost:5900  \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         "x11vnc \
-            -display :$(bashargs::get_arg --display) -localhost -rfbport $(bashargs::get_arg --localport) \
-            -usepw -once -noxdamage -snapfb -speeds dsl -shared -repeat -forever"
+            -display :$(bashargs::get_arg --display) -localhost -noshm \
+            -rfbport $(bashargs::get_arg --localport) -usepw -once \
+            -noxdamage -snapfb -speeds dsl -shared -repeat -forever \
+             $(bashargs::get_arg --x11vnc)"
 
     sleep 4
     case true in

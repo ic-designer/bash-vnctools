@@ -52,6 +52,7 @@ usage: vnctools-open --username=<username> --hostname=<hostname>
         --localport=<localport>     <localport> number of the forwarded port
         --realvnc                   open the desktop using realVNC app
         --screenshare               open the desktop using OSX screenshare app
+        --x11vnc="<args> ..."       <args> passed directly to x11vnc
 
 ```
 
