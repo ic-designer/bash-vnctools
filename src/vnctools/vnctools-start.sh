@@ -1,4 +1,5 @@
 function main() {
+    vnctools::_append_history "$@"
     bashargs::add_required_value --display
     bashargs::add_required_value --geometry
     bashargs::add_required_value --hostname

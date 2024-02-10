@@ -1,4 +1,5 @@
 function main() {
+    vnctools::_append_history "$@"
     bashargs::add_required_value --hostname
     bashargs::add_required_value --username
     bashargs::parse_args $@

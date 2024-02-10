@@ -10,6 +10,15 @@ make -C bash-vnctools-0.3.4 install
 
 ## Commands
 
+### `vnctools-history`
+
+Retrieves the last 1000 vnctools commands called by the current user.
+
+```
+usage: vnctools-history
+```
+
+
 ### `vnctools-kill`
 
 Connects to a remote server using ssh and kills the vnc desktop assigned to the display number.

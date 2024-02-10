@@ -24,7 +24,7 @@ include test/vnctools/test-vnctools.mk
 include $(BOXERBIRD.MK)
 
 # Targets
-override VNCTOOL_LIST := vnctools-kill vnctools-list vnctools-open vnctools-start
+override VNCTOOL_LIST := vnctools-history vnctools-kill vnctools-list vnctools-open vnctools-start
 
 .PHONY: private_all
 private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
@@ -32,6 +32,7 @@ private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
 
 $(WORKDIR_BUILD)/vnctools-%: \
 		$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh \
+		src/vnctools/vnctools-functions.sh \
 		src/vnctools/vnctools-%.sh
 	$(call boxerbird::build-bash-executable, main)
 
@@ -66,6 +67,7 @@ $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
 
 
 .PHONY: private_test
+private_test : export VNCTOOLS_HISTORY_FILE=$(WORKDIR_TEST)/.vnctools-history
 private_test : test-makefile test-vnctools
 
 

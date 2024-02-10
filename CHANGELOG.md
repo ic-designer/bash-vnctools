@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [Unreleased] - 2024-01-30
+### Added
+- Added the optional argument `--x11vnc="<args>"` to `vnctools-open` so x11vnc issues can debugged
+  without modifying the `vnctools-open` script.
+- Add and error trap to the `vnctools-open` script to increase verbosity during errors.
+- Created the command `vnctools-history` to record invocations of the `vnctools` commands.
+### Fixed
+- Timeout option `-o ConnectTimeout=2` added to stop ssh from hanging on bad username or hostname.
+- Removed `-q` option from `ssh` so command will show error messages.
+- The `-noshm` option is added to `x11vnc` command in `vnctools-open` command to fix error with
+  `shmget` unable to access memory.
+
+
 ## [0.3.4] - 2024-01-30
 ### Fixed
 - Fixed bug where x11vnc blocks ports after repeated usage. This may be the real issue that was
