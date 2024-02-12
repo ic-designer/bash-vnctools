@@ -20,13 +20,14 @@ function main() {
     trap 'echo "ERROR: $(caller)" >&2' ERR
     ssh  -CKf -o ConnectTimeout=2 $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         $(printf 'kill -9 $(pgrep -f %s)' "vnctools-x11vnc-$(bashargs::get_arg --display)" )
+    sleep 4
     ssh  -CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:$(bashargs::get_arg --remoteport) \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         "x11vnc \
             -tag vnctools-x11vnc-$(bashargs::get_arg --display) \
             -display :$(bashargs::get_arg --display) \
             -rfbport $(bashargs::get_arg --remoteport) -localhost \
-            -noshm -usepw -once -noxdamage -snapfb -speeds dsl -repeat \
+            -noshm -usepw -forever -noxdamage -snapfb -speeds dsl \
             $(bashargs::get_arg --x11vnc)"
 
     sleep 4

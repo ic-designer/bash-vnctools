@@ -44,7 +44,7 @@ trap echo "ERROR: \$(caller)" >&2 ERR
 ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
--once -noxdamage -snapfb -speeds dsl -repeat
+-forever -noxdamage -snapfb -speeds dsl
 open -W vnc://localhost:localport
 EOF
 )
@@ -68,7 +68,7 @@ trap echo "ERROR: \$(caller)" >&2 ERR
 ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
--once -noxdamage -snapfb -speeds dsl -repeat alpha beta --gamma
+-forever -noxdamage -snapfb -speeds dsl alpha beta --gamma
 open -W vnc://localhost:localport
 EOF
 )
