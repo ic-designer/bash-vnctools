@@ -18,8 +18,7 @@ function main() {
 
     trap "clean_up; exit 1" INT
     trap 'echo "ERROR: $(caller)" >&2' ERR
-    ssh  -4CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:5900  \
-        $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
+    ssh  -4CKf -o ConnectTimeout=2 $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         $(printf 'kill -9 $(pgrep -f x11vnc.*%s)' "$(bashargs::get_arg --localport)" )
     ssh  -4CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:$(bashargs::get_arg --remoteport) \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
