@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added the optional argument `--x11vnc="<args>"` to `vnctools-open` so x11vnc issues can debugged
   without modifying the `vnctools-open` script.
-- Add and error trap to the `vnctools-open` script to increase verbosity during errors.
+- Added the required argument `--remoteport` to `vnctools-open` to control which port that x11vnc
+  uses to forward the display.
 - Created the command `vnctools-history` to record invocations of the `vnctools` commands.
 ### Fixed
 - Timeout option `-o ConnectTimeout=2` added to stop ssh from hanging on bad username or hostname.

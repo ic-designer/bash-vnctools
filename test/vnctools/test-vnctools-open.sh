@@ -1,40 +1,30 @@
 function test_vnctools_open_missing_display() {
     local return_code=0
-    $(vnctools-open \
-        --hostname= \
-        --localport= \
-        --username=
-    ) || return_code=1
+    $(vnctools-open --hostname= --localport= --remoteport= --username= ) || return_code=1
     [[ $return_code -eq 1 ]]
 }
 
 function test_vnctools_open_missing_hostname() {
     local return_code=0
-    $(vnctools-open \
-        --display= \
-        --localport= \
-        --username=
-    ) || return_code=1
+    $(vnctools-open --display= --localport= --remoteport= --username= ) || return_code=1
     [[ $return_code -eq 1 ]]
 }
 
 function test_vnctools_open_missing_localport() {
     local return_code=0
-    $(vnctools-open \
-        --display= \
-        --hostname= \
-        --username=
-    ) || return_code=1
+    $(vnctools-open --display= --hostname= --remoteport= --username= ) || return_code=1
+    [[ $return_code -eq 1 ]]
+}
+
+function test_vnctools_open_missing_remoteport() {
+    local return_code=0
+    $(vnctools-open --display= --hostname= --localport= --username= ) || return_code=1
     [[ $return_code -eq 1 ]]
 }
 
 function test_vnctools_open_missing_username() {
     local return_code=0
-    $(vnctools-open \
-        --display= \
-        --hostname= \
-        --localport= \
-    ) || return_code=1
+    $(vnctools-open --display= --hostname= --localport= --remoteport= ) || return_code=1
     [[ $return_code -eq 1 ]]
 }
 
@@ -45,15 +35,16 @@ function test_vnctools_open_with_valid_args_and_default_options() {
         --display=display \
         --hostname=hostname \
         --localport=localport \
+        --remoteport=remoteport \
         --username=username
     actual=$(waxwing::read_pipe)
     expected=$(cat << EOF
 trap clean_up; exit 1 INT
 trap echo "ERROR: \$(caller)" >&2 ERR
-ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname kill -9 \$(pgrep -f x11vnc.*localport)
-ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname x11vnc \
--display :display -rfbport localport -localhost -noshm -usepw -once -noxdamage -snapfb \
--speeds dsl -repeat
+ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
+-tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
+-once -noxdamage -snapfb -speeds dsl -repeat
 open -W vnc://localhost:localport
 EOF
 )
@@ -67,16 +58,17 @@ function test_vnctools_open_with_valid_args_and_x11vnc_options() {
         --display=display \
         --hostname=hostname \
         --localport=localport \
+        --remoteport=remoteport \
         --username=username \
         --x11vnc="alpha beta --gamma"
     actual=$(waxwing::read_pipe)
     expected=$(cat << EOF
 trap clean_up; exit 1 INT
 trap echo "ERROR: \$(caller)" >&2 ERR
-ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname kill -9 \$(pgrep -f x11vnc.*localport)
-ssh -4CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname x11vnc \
--display :display -rfbport localport -localhost -noshm -usepw -once -noxdamage -snapfb \
--speeds dsl -repeat alpha beta --gamma
+ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
+-tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
+-once -noxdamage -snapfb -speeds dsl -repeat alpha beta --gamma
 open -W vnc://localhost:localport
 EOF
 )

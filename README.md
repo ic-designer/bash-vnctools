@@ -52,13 +52,15 @@ Opens the remote vnc desktop using an ssh tunnel.
 
 ```
 usage: vnctools-open --username=<username> --hostname=<hostname>
-                     --display=<display> --localport=<localport>
+                     --localport=<localport> --remoteport=<remoteport>
+                     --display=<display>
                     [ --realvnc | --screenshare ]
 
         --username=<username>       <username> provided to ssh
         --hostname=<hostname>       <hostname> provided to ssh
+        --localport=<localport>     <localport> number used during local forwarding port
+        --remoteport=<remoteport>   <remoteport> number used during local forwarding port
         --display=<display>         desktop <display> number
-        --localport=<localport>     <localport> number of the forwarded port
         --realvnc                   open the desktop using realVNC app
         --screenshare               open the desktop using OSX screenshare app
         --x11vnc="<args> ..."       <args> passed directly to x11vnc

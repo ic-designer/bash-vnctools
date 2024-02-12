@@ -4,6 +4,7 @@ function main() {
     bashargs::add_required_value --hostname
     bashargs::add_required_value --username
     bashargs::add_required_value --localport
+    bashargs::add_required_value --remoteport
     bashargs::add_optional_flag --realvnc
     bashargs::add_optional_flag --screenshare
     bashargs::add_optional_value --x11vnc
@@ -20,11 +21,11 @@ function main() {
     ssh  -4CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:5900  \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         $(printf 'kill -9 $(pgrep -f x11vnc.*%s)' "$(bashargs::get_arg --localport)" )
-    ssh  -4CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:5900  \
+    ssh  -4CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:$(bashargs::get_arg --remoteport) \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
         "x11vnc \
             -display :$(bashargs::get_arg --display) \
-            -rfbport $(bashargs::get_arg --localport) -localhost \
+            -rfbport $(bashargs::get_arg --remoteport) -localhost \
             -noshm -usepw -once -noxdamage -snapfb -speeds dsl -repeat \
             $(bashargs::get_arg --x11vnc)"
 
