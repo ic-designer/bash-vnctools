@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `-noshm` option is added to `x11vnc` command in `vnctools-open` command to fix error with
   `shmget` unable to access memory.
 - Fixed issue where `make clean` didn't remove the `.waxwing` directory.
+- Existing x11vnc processes now identified by a unique tag
+- Remove ssh options forcing only ivp4 addressing.
 
 
 ## [0.3.4] - 2024-01-30
