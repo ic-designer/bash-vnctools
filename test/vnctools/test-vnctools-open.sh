@@ -30,7 +30,7 @@ function test_vnctools_open_missing_username() {
 
 function test_vnctools_open_with_valid_args_and_default_options() {
     waxwing::monkey_patch_commands_to_record_command_name_only kill
-    waxwing::monkey_patch_commands_to_record_command_name_and_args open ssh trap
+    waxwing::monkey_patch_commands_to_record_command_name_and_args open ssh trap sleep
     vnctools-open \
         --display=display \
         --hostname=hostname \
@@ -42,18 +42,44 @@ function test_vnctools_open_with_valid_args_and_default_options() {
 trap clean_up; exit 1 INT
 trap echo "ERROR: \$(caller)" >&2 ERR
 ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+sleep 4
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
 -forever -noxdamage -snapfb -speeds dsl
+sleep 4
 open -W vnc://localhost:localport
 EOF
 )
     [[ ${actual} == ${expected} ]]
 }
 
+function test_vnctools_open_with_valid_args_and_sleep_option() {
+    waxwing::monkey_patch_commands_to_record_command_name_only kill open ssh trap
+    waxwing::monkey_patch_commands_to_record_command_name_and_args sleep
+    vnctools-open \
+        --display=display \
+        --hostname=hostname \
+        --localport=localport \
+        --remoteport=remoteport \
+        --username=username \
+        --sleep=1
+    actual=$(waxwing::read_pipe)
+    expected=$(cat << EOF
+trap
+trap
+ssh
+sleep 1
+ssh
+sleep 1
+open
+EOF
+)
+    [[ ${actual} == ${expected} ]]
+}
+
 function test_vnctools_open_with_valid_args_and_x11vnc_options() {
-    waxwing::monkey_patch_commands_to_record_command_name_only kill
-    waxwing::monkey_patch_commands_to_record_command_name_and_args open ssh trap
+    waxwing::monkey_patch_commands_to_record_command_name_only kill open sleep trap
+    waxwing::monkey_patch_commands_to_record_command_name_and_args ssh
     vnctools-open \
         --display=display \
         --hostname=hostname \
@@ -63,13 +89,15 @@ function test_vnctools_open_with_valid_args_and_x11vnc_options() {
         --x11vnc="alpha beta --gamma"
     actual=$(waxwing::read_pipe)
     expected=$(cat << EOF
-trap clean_up; exit 1 INT
-trap echo "ERROR: \$(caller)" >&2 ERR
+trap
+trap
 ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+sleep
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
 -forever -noxdamage -snapfb -speeds dsl alpha beta --gamma
-open -W vnc://localhost:localport
+sleep
+open
 EOF
 )
     [[ ${actual} == ${expected} ]]
