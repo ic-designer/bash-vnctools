@@ -9,7 +9,12 @@ function main() {
     bashargs::add_optional_flag --screenshare
     bashargs::add_optional_value --sleep
     bashargs::add_optional_value --x11vnc
+    bashargs::add_optional_flag --trace
     bashargs::parse_args "$@"
+
+    if [[ $(bashargs::get_arg --trace) = true ]]; then
+        set -x
+    fi
 
     clean_up () {
         for job in `jobs -p`; do

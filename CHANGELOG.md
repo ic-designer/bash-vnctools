@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [Unreleased] - YYYY-MM-DD
+### Added
+- Added `--trace` argument to `vnctools-kill`, `vnctools-list`, `vnctools-open`, and
+  `vnctools-start`.
+### Changed
+### Deprecated
+### Fixed
+### Security
+
+
 ## [0.4.0] - 2024-02-12
 ### Added
 - Added the optional argument `--x11vnc="<args>"` to `vnctools-open` so x11vnc issues can debugged
