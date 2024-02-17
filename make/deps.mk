@@ -1,7 +1,7 @@
 # Constants
 WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 
-BASHARGS_VERSION := 0.3.2
+BASHARGS_VERSION := 0.3.3
 BOXERBIRD_BRANCH := main
 WAXWING_BRANCH := main
 
