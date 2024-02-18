@@ -25,8 +25,8 @@ Connects to a remote server using ssh and kills the vnc desktop assigned to the 
 This command also deletes the desktop lock files.
 
 ```
-usage: vnctools-kill --username=<username> --hostname=<hostname>
-                     --display=<display> [--trace]
+usage: vnctools-kill --username=<username> --hostname=<hostname> --display=<display>
+                    [--trace]
 
         --username=<username>       <username> provided to ssh
         --hostname=<hostname>       <hostname> provided to ssh
@@ -41,7 +41,7 @@ Connects to a remote server using ssh and lists the vnc desktops.
 
 ```
 usage: vnctools-list --username=<username> --hostname=<hostname>
-                     [--trace]
+                    [--trace]
 
         --username=<username>       <username> provided to ssh
         --hostname=<hostname>       <hostname> provided to ssh
@@ -55,22 +55,20 @@ usage: vnctools-list --username=<username> --hostname=<hostname>
 Opens the remote vnc desktop using an ssh tunnel.
 
 ```
-usage: vnctools-open --username=<username> --hostname=<hostname>
-                     --localport=<localport> --remoteport=<remoteport>
-                     --display=<display>
-                    [--realvnc | --screenshare]
-                    [--sleep=<time>] [--x11args="<list of args>"]
+usage: vnctools-open --username=<username> --hostname=<hostname> --display=<display>
+                    [--localport=<localport>] [--remoteport=<remoteport>]
+                    [--realvnc | --screenshare] [--sleep=<time>] [--x11args="<list of args>"]
                     [--trace]
 
         --username=<username>       <username> provided to ssh
         --hostname=<hostname>       <hostname> provided to ssh
-        --localport=<localport>     <localport> number used during local forwarding port
-        --remoteport=<remoteport>   <remoteport> number used during local forwarding port
         --display=<display>         desktop <display> number
+        --localport=<localport>     local forwarding port <localport> number (Default: 5900)
+        --remoteport=<remoteport>   local forwarding port <remoteport> number (Default: 5900)
         --realvnc                   open the desktop using realVNC app
         --screenshare               open the desktop using OSX screenshare app
-        --sleep=<time>              <time> in seconds to wait between commands [Default: 4]
-        --x11vnc="<list of args>"   <list of args> passed through to x11vnc [Default: ""]
+        --sleep=<time>              <time> in seconds to wait between commands (Default: 4)
+        --x11vnc="<list of args>"   <list of args> passed through to x11vnc (Default: "")
         --trace                     enable debug tracing
 
 ```

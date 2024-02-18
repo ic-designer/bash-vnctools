@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `--trace` argument to `vnctools-kill`, `vnctools-list`, `vnctools-open`, and
   `vnctools-start`.
+- Added a 5900 default value to `--localport` argument of `vnctools-open` command.
+- Added a 5900 default value to `--remoteport` argument of `vnctools-open` command.
 ### Changed
 ### Deprecated
 ### Fixed

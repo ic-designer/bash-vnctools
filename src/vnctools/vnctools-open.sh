@@ -1,17 +1,24 @@
 function main() {
     vnctools::_append_history "$@"
+    vnctools_open::parse_args "$@"
+    vnctools_open::execute
+}
+
+function vnctools_open::parse_args() {
     bashargs::add_required_value --display
-    bashargs::add_required_value --hostname
     bashargs::add_required_value --username
-    bashargs::add_required_value --localport
-    bashargs::add_required_value --remoteport
+    bashargs::add_required_value --hostname
+    bashargs::add_optional_value --localport 5900
+    bashargs::add_optional_value --remoteport 5900
     bashargs::add_optional_flag --realvnc
     bashargs::add_optional_flag --screenshare
     bashargs::add_optional_value --sleep 4
     bashargs::add_optional_value --x11vnc
     bashargs::add_optional_flag --trace
     bashargs::parse_args "$@"
+}
 
+function vnctools_open::execute() {
     if [[ $(bashargs::get_arg --trace) = true ]]; then
         set -x
     fi
