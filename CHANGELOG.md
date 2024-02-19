@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Deprecated
 ### Fixed
+- Fixed bug in `vnctools-open` command where `pgrep` wasn't finding the correct process to kill
+  before starting a new x11vnc process.
 ### Security
 
 

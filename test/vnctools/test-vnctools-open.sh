@@ -28,7 +28,7 @@ function test_vnctools_open_with_valid_args_and_default_options() {
     expected=$(cat << EOF
 trap clean_up; exit 1 INT
 trap echo "ERROR: \$(caller)" >&2 ERR
-ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep 4
 ssh -CKf -o ConnectTimeout=2 -L 5900:localhost:5900 username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport 5900 -localhost -noshm -usepw \
@@ -52,7 +52,7 @@ function test_vnctools_open_with_valid_args_and_only_non_default_localport() {
     expected=$(cat << EOF
 trap
 trap
-ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:5900 username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport 5900 -localhost -noshm -usepw \
@@ -76,7 +76,7 @@ function test_vnctools_open_with_valid_args_and_only_non_default_remoteport() {
     expected=$(cat << EOF
 trap
 trap
-ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep
 ssh -CKf -o ConnectTimeout=2 -L 5900:localhost:remoteport username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
@@ -126,7 +126,7 @@ function test_vnctools_open_with_valid_args_and_x11vnc_options() {
     expected=$(cat << EOF
 trap
 trap
-ssh -CKf -o ConnectTimeout=2 username@hostname kill -9 \$(pgrep -f vnctools-x11vnc-display)
+ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
 -tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \

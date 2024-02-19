@@ -32,7 +32,7 @@ function vnctools_open::execute() {
     trap "clean_up; exit 1" INT
     trap 'echo "ERROR: $(caller)" >&2' ERR
     ssh  -CKf -o ConnectTimeout=2 $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
-        $(printf 'kill -9 $(pgrep -f %s)' "vnctools-x11vnc-$(bashargs::get_arg --display)" )
+        "pkill -9 -f -e vnctools-x11vnc-$(bashargs::get_arg --display)"
     sleep $(bashargs::get_arg --sleep)
     ssh  -CKf -o ConnectTimeout=2 -L $(bashargs::get_arg --localport):localhost:$(bashargs::get_arg --remoteport) \
         $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
