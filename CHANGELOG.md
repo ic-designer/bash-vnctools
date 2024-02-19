@@ -14,18 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [Unreleased] - YYYY-MM-DD
+## [0.4.1] - 2024-02-19
 ### Added
 - Added `--trace` argument to `vnctools-kill`, `vnctools-list`, `vnctools-open`, and
   `vnctools-start`.
 - Added a 5900 default value to `--localport` argument of `vnctools-open` command.
 - Added a 5900 default value to `--remoteport` argument of `vnctools-open` command.
-### Changed
-### Deprecated
 ### Fixed
 - Fixed bug in `vnctools-open` command where `pgrep` wasn't finding the correct process to kill
   before starting a new x11vnc process.
-### Security
 
 
 ## [0.4.0] - 2024-02-12
