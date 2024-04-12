@@ -64,7 +64,7 @@ usage: vnctools-open --username=<username> --hostname=<hostname> --display=<disp
         --hostname=<hostname>       <hostname> provided to ssh
         --display=<display>         desktop <display> number
         --localport=<localport>     local forwarding port <localport> number (Default: 5900)
-        --remoteport=<remoteport>   local forwarding port <remoteport> number (Default: 5900)
+        --remoteport=<remoteport>   local forwarding port <remoteport> number (Default: AUTO)
         --realvnc                   open the desktop using realVNC app
         --screenshare               open the desktop using OSX screenshare app
         --sleep=<time>              <time> in seconds to wait between commands (Default: 4)
