@@ -14,6 +14,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [Unreleased] - YYYY-MM-DD
+### Added
+- The `vnctools-open` command will now search for an open remote port when setting up
+  the SSH tunnel.
+### Changed
+- Default value for `vnctools-open` option `--remoteport` is changed from `5900` to
+  `auto`.
+### Deprecated
+### Fixed
+### Security
+
+
 ## [0.4.1] - 2024-02-19
 ### Added
 - Added `--trace` argument to `vnctools-kill`, `vnctools-list`, `vnctools-open`, and
