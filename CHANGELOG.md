@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `auto`.
 ### Deprecated
 ### Fixed
+- Added `-repeat` option to the `x11vnc` call to fix issue with keys repeating.
 ### Security
 
 

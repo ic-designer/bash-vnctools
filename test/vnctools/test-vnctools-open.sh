@@ -34,8 +34,8 @@ trap echo "ERROR: \$(caller)" >&2 ERR
 ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep 4
 ssh -CKf -o ConnectTimeout=2 -L 5900:localhost:1024 username@hostname x11vnc \
--tag vnctools-x11vnc-display -display :display -rfbport 1024 -localhost -noshm -usepw \
--forever -noxdamage -snapfb -speeds dsl
+-tag vnctools-x11vnc-display -display :display -rfbport 1024 -localhost -repeat -noshm \
+-usepw -forever -noxdamage -snapfb -speeds dsl
 sleep 4
 open -W vnc://localhost:5900
 EOF
@@ -59,8 +59,8 @@ trap
 ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:1024 username@hostname x11vnc \
--tag vnctools-x11vnc-display -display :display -rfbport 1024 -localhost -noshm -usepw \
--forever -noxdamage -snapfb -speeds dsl
+-tag vnctools-x11vnc-display -display :display -rfbport 1024 -localhost -repeat -noshm \
+-usepw -forever -noxdamage -snapfb -speeds dsl
 sleep
 open -W vnc://localhost:localport
 EOF
@@ -83,8 +83,8 @@ trap
 ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep
 ssh -CKf -o ConnectTimeout=2 -L 5900:localhost:remoteport username@hostname x11vnc \
--tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
--forever -noxdamage -snapfb -speeds dsl
+-tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -repeat \
+-noshm -usepw -forever -noxdamage -snapfb -speeds dsl
 sleep
 open
 EOF
@@ -133,8 +133,8 @@ trap
 ssh -CKf -o ConnectTimeout=2 username@hostname pkill -9 -f -e vnctools-x11vnc-display
 sleep
 ssh -CKf -o ConnectTimeout=2 -L localport:localhost:remoteport username@hostname x11vnc \
--tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -noshm -usepw \
--forever -noxdamage -snapfb -speeds dsl alpha beta --gamma
+-tag vnctools-x11vnc-display -display :display -rfbport remoteport -localhost -repeat \
+-noshm -usepw -forever -noxdamage -snapfb -speeds dsl alpha beta --gamma
 sleep
 open
 EOF

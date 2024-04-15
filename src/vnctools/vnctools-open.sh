@@ -45,7 +45,7 @@ function vnctools_open::execute() {
             -tag vnctools-x11vnc-$(bashargs::get_arg --display) \
             -display :$(bashargs::get_arg --display) \
             -rfbport ${remoteport} -localhost \
-            -noshm -usepw -forever -noxdamage -snapfb -speeds dsl \
+            -repeat -noshm -usepw -forever -noxdamage -snapfb -speeds dsl \
             $(bashargs::get_arg --x11vnc)"
 
     sleep $(bashargs::get_arg --sleep)
