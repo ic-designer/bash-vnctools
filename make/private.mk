@@ -24,7 +24,13 @@ include test/vnctools/test-vnctools.mk
 include $(BOXERBIRD.MK)
 
 # Targets
-override VNCTOOL_LIST := vnctools-history vnctools-kill vnctools-list vnctools-open vnctools-start
+override VNCTOOL_LIST := \
+		vnctools-connect \
+		vnctools-history \
+		vnctools-kill \
+		vnctools-list \
+		vnctools-open \
+		vnctools-start \
 
 .PHONY: private_all
 private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
