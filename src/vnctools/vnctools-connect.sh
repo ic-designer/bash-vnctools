@@ -1,14 +1,12 @@
 SSH='ssh'
-SSH_FLAGS='-CKf -o ConnectTimeout=2'
+SSH_FLAGS='-CKTq -o ConnectTimeout=2'
 SSH_HEADER='--vnctools--'
 
-function main() {
-    local username=jfreden
-    local hostname=fasic-beast1.fnal.gov
-    echo
-    echo
-    # # echo "$(vncto
+PORT_MIN=1024
+PORT_MAX=65535
 
+
+function main() {
     vnctools::_append_history "$@"
     vnctools_connect::parse_args "$@"
     vnctools_connect::execute
@@ -18,10 +16,10 @@ function vnctools_connect::parse_args() {
     bashargs::add_required_value --hostname
     bashargs::add_required_value --username
     bashargs::add_optional_value --display AUTO
-    bashargs::add_optional_value --depth 24
+    bashargs::add_optional_value --depth 16
     bashargs::add_optional_value --localport AUTO
     bashargs::add_optional_value --remoteport AUTO
-    bashargs::add_optional_value --resolution "2560x1440"
+    bashargs::add_optional_value --resolution AUTO
     bashargs::add_optional_value --sleep 4
     bashargs::add_optional_value --x11vnc
     bashargs::add_optional_flag --realvnc
@@ -30,9 +28,13 @@ function vnctools_connect::parse_args() {
     bashargs::parse_args "$@"
 }
 
+
 function vnctools_connect::execute() {
+    trap 'vnctools_connect::clean_up; exit 1' INT TERM
+    trap 'vnctools_connect::clean_up; echo "ERROR: $(caller)" >&2' ERR
+
     if [[ $(bashargs::get_arg --trace) = true ]]; then
-        set -x
+        set -xT
     fi
 
     if [[ $(bashargs::get_arg --display) != "AUTO" ]]; then
@@ -54,24 +56,13 @@ function vnctools_connect::execute() {
                 $(bashargs::get_arg --hostname))
     fi
 
-    clean_up () {
-        for job in `jobs -p`; do
-            kill ${job}
-        done
-    }
-    trap "clean_up; exit 1" INT
-    trap 'echo "ERROR: $(caller)" >&2' ERR
-
     local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
             $(bashargs::get_arg --username) \
             $(bashargs::get_arg --hostname))
-
     if [[ -z ${remote_vnc_session} ]]; then
-        vnctools_connect::auto_start_remote_vnc_sessions \
+        vnctools_connect::new_remote_vnc_session \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname)
-        sleep $(bashargs::get_arg --sleep)
-
         local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
             $(bashargs::get_arg --username) \
             $(bashargs::get_arg --hostname))
@@ -81,18 +72,28 @@ function vnctools_connect::execute() {
         fi
     fi
 
-    vnctools_connect::execute_remote_command ${username} ${hostname} \
+    vnctools_connect::execute_remote_command \
+            $(bashargs::get_arg --username) \
+            $(bashargs::get_arg --hostname) \
             "pkill -9 -f -e vnctools-x11vnc-${remote_vnc_session}"
+    vnctools_connect::open_remote_vnc_session \
+            $(bashargs::get_arg --username) \
+            $(bashargs::get_arg --hostname) \
+            ${remote_vnc_session} \
+            ${localport} \
+            ${remoteport} \
+            $(bashargs::get_arg --x11vnc)
     sleep $(bashargs::get_arg --sleep)
-    vnctools_connect::execute_remote_command ${username} ${hostname} \
-            "x11vnc \
-                -tag vnctools-x11vnc-${remote_vnc_session} \
-                -display :${remote_vnc_session} \
-                -rfbport ${remoteport} -localhost"
-                # -repeat -noshm -usepw -forever -noxdamage -snapfb -speeds dsl \
-                # $(bashargs::get_arg --x11vnc)"
 
-    sleep $(bashargs::get_arg --sleep)
+    if [[ $(bashargs::get_arg --resolution) != "AUTO" ]]; then
+        vnctools_connect::resize_remote_vnc_session \
+            $(bashargs::get_arg --username) \
+            $(bashargs::get_arg --hostname) \
+            ${remote_vnc_session} \
+            $(bashargs::get_arg --resolution)
+    fi
+
+
     case true in
         $(bashargs::get_arg --realvnc))
             /Applications/VNC\ Viewer.app/Contents/MacOS/vncviewer localhost:${localport}
@@ -104,14 +105,26 @@ function vnctools_connect::execute() {
             open -W vnc://localhost:${localport}
             ;;
     esac
-    clean_up
+    vnctools_connect::clean_up
     wait
 }
 
+function vnctools_connect::clean_up () {
+    for job in `jobs -p`; do
+        kill ${job}
+    done
+}
+
+function vnctools_connect::execute_remote_command() {
+    local username=$1
+    local hostname=$2
+    echo "$(${SSH} ${SSH_FLAGS} ${username}@${hostname} "\
+        echo ${SSH_HEADER};${@:3}" | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
+}
 
 function vnctools_connect::get_local_listening_port() {
-    local port=$(vnctools_connect::get_listening_port \
-            "$(vnctools_connect::query_local_listening_ports $1 $2)" "${@:3}")
+    local port=$(vnctools_connect::_get_listening_port \
+            "$(vnctools_connect::_query_local_listening_ports $1 $2)" "${@:3}")
     if [[ -z "${port}" ]]; then
         exit 1
     else
@@ -120,8 +133,8 @@ function vnctools_connect::get_local_listening_port() {
 }
 
 function vnctools_connect::get_remote_listening_port() {
-    local port=$(vnctools_connect::get_listening_port \
-            "$(vnctools_connect::query_remote_listening_ports $1 $2)" "${@:3}")
+    local port=$(vnctools_connect::_get_listening_port \
+            "$(vnctools_connect::_query_remote_listening_ports $1 $2)" "${@:3}")
     if [[ -z "${port}" ]]; then
         exit 1
     else
@@ -129,35 +142,11 @@ function vnctools_connect::get_remote_listening_port() {
     fi
 }
 
-function vnctools_connect::get_listening_port() {
-    if [[ $# -eq 1 ]]; then
-        local min_port=1023
-        local max_port=65535
-        local report="$1"
-    else
-        local min_port="$2"
-        local max_port="$3"
-        local report="${@:4}"
-    fi
-
-    for (( port = ${min_port}; port <= $((max_port+1)); port++ )); do
-        if ! [[ "${report}" =~ :${port} ]]; then
-            break 1
-        fi
-    done
-
-    if [[ ${port} -gt ${max_port} ]]; then
-        echo "ERROR: No available remote port found between ${min_port} and ${max_port}" 1>&2
-        exit 1
-    fi
-    echo ${port}
-}
-
 function vnctools_connect::get_remote_vnc_session() {
     if [[ $# -gt 2 ]]; then
         local report="${@:3}"
     else
-        local report="$(vnctools_connect::query_remote_vnc_sessions $1 $2)"
+        local report="$(vnctools_connect::_query_remote_vnc_sessions $1 $2)"
     fi
 
     if [[ -z "${report}" ]]; then
@@ -169,35 +158,84 @@ function vnctools_connect::get_remote_vnc_session() {
     echo "${report}" | head -n 1 | sed 's/^://'
 }
 
-function vnctools_connect::query_local_listening_ports() {
-    echo "$(lsof -iTCP -sTCP:LISTEN -n -P | awk '{print $9}')"
-}
-
-function vnctools_connect::query_remote_listening_ports() {
-    local username=$1
-    local hostname=$2
-    vnctools_connect::execute_remote_command ${username} ${hostname} \
-            'netstat -tulpen4 | grep LISTEN | awk "{print \$4}"'
-}
-
-function vnctools_connect::query_remote_vnc_sessions() {
-    local username=$1
-    local hostname=$2
-    vnctools_connect::execute_remote_command ${username} ${hostname} \
-            'vncserver -list | grep ^: | awk "{print \$1}"'
-}
-
-function vnctools_connect::auto_start_remote_vnc_sessions() {
+function vnctools_connect::new_remote_vnc_session() {
     local username=$1
     local hostname=$2
     vnctools_connect::execute_remote_command ${username} ${hostname} \
             "vncserver -localhost ${@:3}"
 }
 
-function vnctools_connect::execute_remote_command() {
+function vnctools_connect::open_remote_vnc_session() {
     local username=$1
     local hostname=$2
-    echo "$(${SSH} ${SSH_FLAGS} ${username}@${hostname} " \
-            echo ${SSH_HEADER}
-            ${@:3}" | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
+    local remote_vnc_session=$3
+    local localport=$4
+    local remoteport=$5
+    ${SSH} ${SSH_FLAGS} -f -t -L ${localport}:localhost:${remoteport} \
+            ${username}@${hostname} \
+            "x11vnc \
+                -tag vnctools-x11vnc-${remote_vnc_session} \
+                -display :${remote_vnc_session} \
+                -rfbport ${remoteport} -localhost \
+                -repeat -noshm -usepw -forever -noxdamage -snapfb -speeds dsl \
+                ${@:6}"
+}
+
+function vnctools_connect::resize_remote_vnc_session() {
+    local username=$1
+    local hostname=$2
+    local remote_vnc_session=$3
+    local resolution=$4
+    local refresh=60
+    vnctools_connect::execute_remote_command ${username} ${hostname} \
+            "MONITOR=\$( (xrandr -display :${remote_vnc_session} | grep -e ' connected [^C]' | sed -e 's/\([A-Z0-9]\+\) connected.*/\1/') )
+            MODELINE=\$(cvt $(echo ${resolution} | sed "s/x/ /") ${refresh} | grep -e \"Modeline [^(]\" | sed -e 's/.*Modeline //')
+            MODEPARAMS=\$(echo \$MODELINE | sed -e 's/.*\" //')
+            MODERES=\$(echo \$MODELINE | grep -o -P '(?<=\").*(?=\")')
+            xrandr -display :${remote_vnc_session} --newmode \${MODERES} \${MODEPARAMS}
+            xrandr -display :${remote_vnc_session} --addmode \${MONITOR} \${MODERES}
+            xrandr -display :${remote_vnc_session} -s \${MODERES}
+            "
+}
+
+function vnctools_connect::_get_listening_port() {
+    if [[ $# -eq 1 ]]; then
+        local port_min=${PORT_MIN}
+        local port_max=${PORT_MAX}
+        local report="$1"
+    else
+        local port_min="$2"
+        local port_max="$3"
+        local report="${@:4}"
+    fi
+
+    for (( port = ${port_min}; port <= $((port_max+1)); port++ )); do
+        if ! [[ "${report}" =~ :${port} ]]; then
+            break 1
+        fi
+    done
+
+    if [[ ${port} -gt ${port_max} ]]; then
+        echo "ERROR: No available port found between ${port_min} and ${port_max}" 1>&2
+        exit 1
+    fi
+    echo ${port}
+}
+
+function vnctools_connect::_query_local_listening_ports() {
+    echo "$(lsof -iTCP -sTCP:LISTEN -n -P | awk '{print $9}')"
+}
+
+function vnctools_connect::_query_remote_listening_ports() {
+    local username=$1
+    local hostname=$2
+    vnctools_connect::execute_remote_command ${username} ${hostname} \
+            'netstat -tulpen4 | grep LISTEN | awk "{print \$4}"'
+}
+
+function vnctools_connect::_query_remote_vnc_sessions() {
+    local username=$1
+    local hostname=$2
+    vnctools_connect::execute_remote_command ${username} ${hostname} \
+            'vncserver -list | grep ^: | awk "{print \$1}"'
 }
