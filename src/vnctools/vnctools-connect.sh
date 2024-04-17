@@ -123,7 +123,7 @@ function vnctools_connect::execute_remote_command() {
     local username=$1
     local hostname=$2
     echo "$(${SSH} ${SSH_FLAGS} ${username}@${hostname} "\
-        echo ${SSH_HEADER};${@:3}" | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
+        echo ${SSH_HEADER};${@:3}" 2>/dev/null | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
 }
 
 function vnctools_connect::get_local_listening_port() {
