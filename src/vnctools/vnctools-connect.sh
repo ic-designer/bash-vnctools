@@ -227,7 +227,7 @@ function vnctools_connect::_get_listening_port() {
 }
 
 function vnctools_connect::_query_local_listening_ports() {
-    echo "$(lsof -iTCP -sTCP:LISTEN -n -P | awk '{print $9}')"
+    echo "$(lsof -iTCP -sTCP:LISTEN -n -P 2> /dev/null | awk '{print $9}')"
 }
 
 function vnctools_connect::_query_remote_listening_ports() {
