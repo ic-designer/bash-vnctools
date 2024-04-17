@@ -77,7 +77,7 @@ function vnctools_connect::execute() {
     vnctools_connect::execute_remote_command \
             $(bashargs::get_arg --username) \
             $(bashargs::get_arg --hostname) \
-            "pkill -9 -f -e vnctools-x11vnc-${remote_vnc_session}"
+            "pkill -9 -f -e vnctools-x11vnc-${remote_vnc_session}" 2>&1 >/dev/null
     vnctools_connect::open_remote_vnc_session \
             $(bashargs::get_arg --username) \
             $(bashargs::get_arg --hostname) \
