@@ -7,9 +7,11 @@ PORT_MAX=65535
 
 
 function main() {
-    vnctools::_append_history "$@"
-    vnctools_connect::parse_args "$@"
-    vnctools_connect::execute
+    (
+        vnctools::_append_history "$@"
+        vnctools_connect::parse_args "$@"
+        vnctools_connect::execute
+    )
 }
 
 function vnctools_connect::parse_args() {
@@ -107,6 +109,8 @@ function vnctools_connect::execute() {
     esac
     vnctools_connect::clean_up
     wait
+    sleep 0.1
+    echo
 }
 
 function vnctools_connect::clean_up () {
