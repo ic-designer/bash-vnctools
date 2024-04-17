@@ -10,6 +10,31 @@ make -C bash-vnctools-0.4.1 install
 
 ## Commands
 
+### `vnctools-connnect`
+
+Opens the remote vnc desktop using an ssh tunnel. Opens an existing session if one
+exists, otherwise creates a new one.
+
+```
+usage: vnctools-connect --username=<username> --hostname=<hostname>
+                       [--display=<display>] [--localport=<localport>] [--remoteport=<remoteport>]
+                       [--resolution=<resolution>] [--depth=<depth>] [--realvnc | --screenshare]
+                       [--sleep=<time>] [--x11args="<list of args>"] [--trace]
+
+        --username=<username>       <username> provided to ssh
+        --hostname=<hostname>       <hostname> provided to ssh
+        --display=<display>         desktop <display> number (Default: AUTO)
+        --localport=<localport>     local forwarding port <localport> number (Default: AUTO)
+        --remoteport=<remoteport>   remote forwarding port <remoteport> number (Default: AUTO)
+        --resolution=<resolution>   desktop <resolution> specified as <width>x<height>
+        --depth=<depth>             desktop pixel depth (Default: 16)
+        --realvnc                   open the desktop using realVNC app
+        --screenshare               open the desktop using OSX screenshare app
+        --sleep=<time>              <time> in seconds to wait between commands (Default: 4)
+        --x11vnc="<list of args>"   <list of args> passed through to x11vnc (Default: "")
+        --trace                     enable debug tracing
+```
+
 ### `vnctools-history`
 
 Retrieves the last 1000 vnctools commands called by the current user.
@@ -64,7 +89,7 @@ usage: vnctools-open --username=<username> --hostname=<hostname> --display=<disp
         --hostname=<hostname>       <hostname> provided to ssh
         --display=<display>         desktop <display> number
         --localport=<localport>     local forwarding port <localport> number (Default: 5900)
-        --remoteport=<remoteport>   local forwarding port <remoteport> number (Default: AUTO)
+        --remoteport=<remoteport>   remote forwarding port <remoteport> number (Default: AUTO)
         --realvnc                   open the desktop using realVNC app
         --screenshare               open the desktop using OSX screenshare app
         --sleep=<time>              <time> in seconds to wait between commands (Default: 4)
