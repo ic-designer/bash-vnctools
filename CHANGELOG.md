@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 ### Added
+- Created the `vnctools-connect` command that auto-resolves the display number and
+  port settings.
 - The `vnctools-open` command will now search for an open remote port when setting up
   the SSH tunnel.
 ### Changed
