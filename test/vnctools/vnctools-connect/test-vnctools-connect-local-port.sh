@@ -2,10 +2,10 @@ function test_vnctools_connect_get_local_listening_port() {
     source $(which vnctools-connect)
     waxwing::monkey_patch_commands_to_record_command_name_and_args lsof awk
     vnctools_connect::get_local_listening_port user host
-    local actual="$(waxwing::read_pipe)"
+    local actual="$(waxwing::read_pipe | sort)"
     local expected="$(cat << EOF
-lsof -iTCP -sTCP:LISTEN -n -P
 awk {print \$9}
+lsof -iTCP -sTCP:LISTEN -n -P
 EOF
 )"
      [[ ${actual} == ${expected} ]]
