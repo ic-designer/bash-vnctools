@@ -8,3 +8,4 @@
   substitution to avoid `errexit`.
 - Need to test the vnctools_connect::resize_remote_vnc_session
 - Need to really test the vnctools_connect logic
+- Think a bit more about the error handling for the functions
