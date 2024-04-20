@@ -46,16 +46,20 @@ function vnctools_connect::execute() {
 
     local localport=$(bashargs::get_arg --localport)
     if [[ ${localport} == "AUTO" ]]; then
+        echo -n "INFO: Autodetecting local listenting port...."
         localport=$(vnctools_connect::find_local_listening_port \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname))
+        echo -e "${localport}"
     fi
 
     local remoteport=$(bashargs::get_arg --remoteport)
     if [[ ${remoteport} == "AUTO" ]]; then
+        echo -n "INFO: Autodetecting remote listenting port...."
         remoteport=$(vnctools_connect::find_remote_listening_port \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname))
+        echo -e "${remoteport}"
     fi
 
     local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
