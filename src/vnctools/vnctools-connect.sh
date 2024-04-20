@@ -46,14 +46,14 @@ function vnctools_connect::execute() {
 
     local localport=$(bashargs::get_arg --localport)
     if [[ ${localport} == "AUTO" ]]; then
-        localport=$(vnctools_connect::get_local_listening_port \
+        localport=$(vnctools_connect::find_local_listening_port \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname))
     fi
 
     local remoteport=$(bashargs::get_arg --remoteport)
     if [[ ${remoteport} == "AUTO" ]]; then
-        remoteport=$(vnctools_connect::get_remote_listening_port \
+        remoteport=$(vnctools_connect::find_remote_listening_port \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname))
     fi
@@ -126,8 +126,8 @@ function vnctools_connect::execute_remote_command() {
         echo ${SSH_HEADER};${@:3}" 2>/dev/null | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
 }
 
-function vnctools_connect::get_local_listening_port() {
-    local port=$(vnctools_connect::_get_listening_port \
+function vnctools_connect::find_local_listening_port() {
+    local port=$(vnctools_connect::_find_listening_port \
             "$(vnctools_connect::_query_local_listening_ports $1 $2)" "${@:3}")
     if [[ -z "${port}" ]]; then
         exit 1
@@ -136,8 +136,8 @@ function vnctools_connect::get_local_listening_port() {
     fi
 }
 
-function vnctools_connect::get_remote_listening_port() {
-    local port=$(vnctools_connect::_get_listening_port \
+function vnctools_connect::find_remote_listening_port() {
+    local port=$(vnctools_connect::_find_listening_port \
             "$(vnctools_connect::_query_remote_listening_ports $1 $2)" "${@:3}")
     if [[ -z "${port}" ]]; then
         exit 1
@@ -202,7 +202,7 @@ function vnctools_connect::resize_remote_vnc_session() {
             "
 }
 
-function vnctools_connect::_get_listening_port() {
+function vnctools_connect::_find_listening_port() {
     if [[ $# -eq 1 ]]; then
         local port_min=${PORT_MIN}
         local port_max=${PORT_MAX}
