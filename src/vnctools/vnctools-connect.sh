@@ -198,7 +198,7 @@ function vnctools_connect::resize_remote_vnc_session() {
             MODERES=\$(echo \$MODELINE | grep -o -P '(?<=\").*(?=\")')
             xrandr -display :${remote_vnc_session} --newmode \${MODERES} \${MODEPARAMS}
             xrandr -display :${remote_vnc_session} --addmode \${MONITOR} \${MODERES}
-            xrandr -display :${remote_vnc_session} -s \${MODERES}
+            xrandr -display :${remote_vnc_session} -s \${MODERES} --dpi 256
             "
 }
 
