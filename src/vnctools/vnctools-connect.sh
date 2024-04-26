@@ -1,5 +1,5 @@
 SSH='ssh'
-SSH_FLAGS='-CKTq -o ConnectTimeout=2'
+SSH_FLAGS='-CKT -o ConnectTimeout=2'
 SSH_HEADER='--vnctools--'
 
 PORT_MIN=1024
@@ -39,39 +39,34 @@ function vnctools_connect::execute() {
         set -xT
     fi
 
-    if [[ $(bashargs::get_arg --display) != "AUTO" ]]; then
-        echo "ERROR: Only the default --display=AUTO is supported" >&2
-        exit 1
-    fi
-
     local localport=$(bashargs::get_arg --localport)
     if [[ ${localport} == "AUTO" ]]; then
-        localport=$(vnctools_connect::get_local_listening_port \
+        echo -n "INFO: Autodetecting local listenting port: "
+        localport=$(vnctools_connect::find_local_listening_port \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname))
+        echo -e "${localport}"
     fi
 
     local remoteport=$(bashargs::get_arg --remoteport)
     if [[ ${remoteport} == "AUTO" ]]; then
-        remoteport=$(vnctools_connect::get_remote_listening_port \
+        echo -n "INFO: Autodetecting remote listenting port: "
+        remoteport=$(vnctools_connect::find_remote_listening_port \
                 $(bashargs::get_arg --username) \
                 $(bashargs::get_arg --hostname))
+        echo -e "${remoteport}"
     fi
 
-    local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
-            $(bashargs::get_arg --username) \
-            $(bashargs::get_arg --hostname))
-    if [[ -z ${remote_vnc_session} ]]; then
-        vnctools_connect::new_remote_vnc_session \
+    local remote_vnc_session=$(bashargs::get_arg --display)
+    if [[ $(bashargs::get_arg --display) == "AUTO" ]]; then
+        echo -n "INFO: Autodetecting remote VNC session: "
+        remote_vnc_session=$(vnctools_connect::find_remote_vnc_session \
                 $(bashargs::get_arg --username) \
-                $(bashargs::get_arg --hostname)
-        local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
-            $(bashargs::get_arg --username) \
-            $(bashargs::get_arg --hostname))
-        if [[ -z ${remote_vnc_session} ]]; then
-            echo "ERROR: Unable to create a new VNC session" >&2
-            exit 1
-        fi
+                $(bashargs::get_arg --hostname))
+        echo -e "${remote_vnc_session}"
+    else
+        echo "ERROR: Only the default --display=AUTO is supported" >&2
+        exit 1
     fi
 
     vnctools_connect::execute_remote_command \
@@ -126,24 +121,30 @@ function vnctools_connect::execute_remote_command() {
         echo ${SSH_HEADER};${@:3}" 2>/dev/null | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
 }
 
-function vnctools_connect::get_local_listening_port() {
-    local port=$(vnctools_connect::_get_listening_port \
+function vnctools_connect::find_local_listening_port() {
+    local port=$(vnctools_connect::_find_listening_port \
             "$(vnctools_connect::_query_local_listening_ports $1 $2)" "${@:3}")
-    if [[ -z "${port}" ]]; then
-        exit 1
-    else
-        echo ${port}
-    fi
+    echo ${port:?ERROR: Unable to find local listening port}
 }
 
-function vnctools_connect::get_remote_listening_port() {
-    local port=$(vnctools_connect::_get_listening_port \
+function vnctools_connect::find_remote_listening_port() {
+    local port=$(vnctools_connect::_find_listening_port \
             "$(vnctools_connect::_query_remote_listening_ports $1 $2)" "${@:3}")
-    if [[ -z "${port}" ]]; then
-        exit 1
-    else
-        echo ${port}
+    echo ${port:?ERROR: Unable to find remote listening port}
+}
+
+function vnctools_connect::find_remote_vnc_session() {
+    local username=$1
+    local hostname=$2
+    local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
+            ${username} ${hostname} "${@:3}")
+    if [[ -z ${remote_vnc_session} ]]; then
+        vnctools_connect::new_remote_vnc_session ${username} ${hostname}
+        local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
+            ${username} ${hostname})
+            exit 1
     fi
+    echo ${remote_vnc_session:? ERROR: Unable to create a new VNC session}
 }
 
 function vnctools_connect::get_remote_vnc_session() {
@@ -198,11 +199,12 @@ function vnctools_connect::resize_remote_vnc_session() {
             MODERES=\$(echo \$MODELINE | grep -o -P '(?<=\").*(?=\")')
             xrandr -display :${remote_vnc_session} --newmode \${MODERES} \${MODEPARAMS}
             xrandr -display :${remote_vnc_session} --addmode \${MONITOR} \${MODERES}
-            xrandr -display :${remote_vnc_session} -s \${MODERES} --dpi 256
+            xrandr -display :${remote_vnc_session} -s \${MODERES}
+            xrandr -display :${remote_vnc_session} --dpi 256
             "
 }
 
-function vnctools_connect::_get_listening_port() {
+function vnctools_connect::_find_listening_port() {
     if [[ $# -eq 1 ]]; then
         local port_min=${PORT_MIN}
         local port_max=${PORT_MAX}
