@@ -1,5 +1,5 @@
 SSH='ssh'
-SSH_FLAGS='-CKTq -o ConnectTimeout=2'
+SSH_FLAGS='-CKT -o ConnectTimeout=2'
 SSH_HEADER='--vnctools--'
 
 PORT_MIN=1024
@@ -137,7 +137,7 @@ function vnctools_connect::find_remote_vnc_session() {
     local username=$1
     local hostname=$2
     local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
-            ${username} ${hostname})
+            ${username} ${hostname} "${@:3}")
     if [[ -z ${remote_vnc_session} ]]; then
         vnctools_connect::new_remote_vnc_session ${username} ${hostname}
         local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
@@ -199,7 +199,8 @@ function vnctools_connect::resize_remote_vnc_session() {
             MODERES=\$(echo \$MODELINE | grep -o -P '(?<=\").*(?=\")')
             xrandr -display :${remote_vnc_session} --newmode \${MODERES} \${MODEPARAMS}
             xrandr -display :${remote_vnc_session} --addmode \${MONITOR} \${MODERES}
-            xrandr -display :${remote_vnc_session} -s \${MODERES} --dpi 256
+            xrandr -display :${remote_vnc_session} -s \${MODERES}
+            xrandr -display :${remote_vnc_session} --dpi 256
             "
 }
 
