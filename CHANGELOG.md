@@ -20,9 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   port settings.
 - The `vnctools-open` command will now search for an open remote port when setting up
   the SSH tunnel.
+- Added `workflow_dispatch` to allow manually triggering the action.
 ### Changed
 - Default value for `vnctools-open` option `--remoteport` is changed from `5900` to
   `auto`.
+- Updated the github workflow use checkout version 4 to update Node from 16 to 20.
 ### Deprecated
 ### Fixed
 - Added `-repeat` option to the `x11vnc` call to fix issue with keys repeating.
