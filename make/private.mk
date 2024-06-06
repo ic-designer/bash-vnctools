@@ -2,8 +2,15 @@
 .DELETE_ON_ERROR:
 .SUFFIXES:
 MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-builtin-variables
+MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --warn-undefined-variables
 
 # Constants
+NAME := vnctools
+VERSION := $(shell git describe --always --dirty --broken 2> /dev/null)
+
+# Paths
 DESTDIR ?= $(error ERROR: Undefined variable DESTDIR)
 PREFIX ?= $(error ERROR: Undefined variable PREFIX)
 BINDIR ?= $(error ERROR: Undefined variable BINDIR)
@@ -16,6 +23,7 @@ override VERSION := $(shell git describe --always --dirty --broken 2> /dev/null)
 override WORKDIR_BUILD = $(WORKDIR_ROOT)/build/$(NAME)/$(VERSION)
 override WORKDIR_DEPS = $(WORKDIR_ROOT)/deps
 override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
+override PKGSUBDIR = $(NAME)
 
 # Includes
 include make/deps.mk

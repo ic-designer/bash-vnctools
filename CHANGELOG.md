@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
-## [Unreleased] - YYYY-MM-DD
+## [0.5.0] - 2024-06-06
 ### Added
 - Created the `vnctools-connect` command that auto-resolves the display number and
   port settings.
@@ -25,10 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default value for `vnctools-open` option `--remoteport` is changed from `5900` to
   `auto`.
 - Updated the github workflow use checkout version 4 to update Node from 16 to 20.
-### Deprecated
 ### Fixed
 - Added `-repeat` option to the `x11vnc` call to fix issue with keys repeating.
-### Security
 
 
 ## [0.4.1] - 2024-02-19
