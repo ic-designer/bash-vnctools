@@ -23,9 +23,6 @@ override PKGSUBDIR = $(NAME)
 
 # Includes
 include make/deps.mk
-include test/makefile/test-makefile.mk
-include test/vnctools/test-vnctools.mk
-include $(BOXERBIRD.MK)
 
 # Targets
 override VNCTOOL_LIST := \
@@ -78,7 +75,8 @@ $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
 
 .PHONY: private_test
 private_test : export VNCTOOLS_HISTORY_FILE=$(WORKDIR_TEST)/.vnctools-history
-private_test : test-makefile test-vnctools
+private_test : test-vnctools-bowerbird test-vnctools-waxwing
+$(eval $(call bowerbird::generate-test-runner,test-vnctools-bowerbird,test,test*.mk))
 
 
 .PHONY: private_uninstall
