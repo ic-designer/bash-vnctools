@@ -1,11 +1,29 @@
 # Constants
 WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 
-BASHARGS_VERSION := 0.3.3
-BOXERBIRD_BRANCH := main
-WAXWING_BRANCH := main
+# Load Bowerbird Dependency Tools
+BOWERBIRD_DEPS.MK := $(WORKDIR_DEPS)/bowerbird-deps/bowerbird_deps.mk
+$(BOWERBIRD_DEPS.MK):
+	@curl --silent --show-error --fail --create-dirs -o $@ -L \
+https://raw.githubusercontent.com/ic-designer/make-bowerbird-deps/\
+main/src/bowerbird-deps/bowerbird-deps.mk
+include $(BOWERBIRD_DEPS.MK)
 
-# Dependencies
+# Bowerbird Compatible Dependencies
+$(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-bash-builder,\
+		https://github.com/ic-designer/make-bowerbird-bash-builder.git,0.1.0,bowerbird.mk))
+$(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-githooks,\
+		https://github.com/ic-designer/make-bowerbird-githooks.git,0.1.0,bowerbird.mk))
+$(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-help,\
+		https://github.com/ic-designer/make-bowerbird-help.git,0.1.0,bowerbird.mk))
+$(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-install-tools,\
+		https://github.com/ic-designer/make-bowerbird-install-tools.git,0.1.0,bowerbird.mk))
+$(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-test,\
+		https://github.com/ic-designer/make-bowerbird-test.git,main,bowerbird.mk))
+
+
+# Other Dependencies
+BASHARGS_VERSION := 0.3.4
 override BASHARGS_REPO := $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION)
 $(BASHARGS_REPO):
 	@echo "INFO: Fetching $@..."
@@ -15,16 +33,7 @@ $(BASHARGS_REPO):
 	@echo "INFO: Fetching $@ completed."
 	@echo
 
-override BOXERBIRD.MK := $(WORKDIR_DEPS)/make-boxerbird/boxerbird.mk
-$(BOXERBIRD.MK):
-	@echo "INFO: Fetching $@..."
-	git clone --config advice.detachedHead=false --depth 1 \
-			https://github.com/ic-designer/make-boxerbird.git --branch $(BOXERBIRD_BRANCH) \
-			$(WORKDIR_DEPS)/make-boxerbird
-	test -f $@
-	@echo "INFO: Fetching $@ completed."
-	@echo
-
+WAXWING_BRANCH := main
 override WAXWING := $(WORKDIR_DEPS)/bash-waxwing/bin/waxwing
 $(WAXWING):
 	@echo "INFO: Fetching $@..."
