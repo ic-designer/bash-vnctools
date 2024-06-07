@@ -16,10 +16,6 @@ PREFIX ?= $(error ERROR: Undefined variable PREFIX)
 BINDIR ?= $(error ERROR: Undefined variable BINDIR)
 LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
 WORKDIR_ROOT ?= $(error ERROR: Undefined variable WORKDIR_ROOT)
-
-override NAME := vnctools
-override PKGSUBDIR = $(NAME)
-override VERSION := $(shell git describe --always --dirty --broken 2> /dev/null)
 override WORKDIR_BUILD = $(WORKDIR_ROOT)/build/$(NAME)/$(VERSION)
 override WORKDIR_DEPS = $(WORKDIR_ROOT)/deps
 override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
