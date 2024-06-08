@@ -41,7 +41,7 @@ $(WORKDIR_BUILD)/vnctools-%: \
 		$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh \
 		src/vnctools/vnctools-functions.sh \
 		src/vnctools/vnctools-%.sh
-	$(call boxerbird::build-bash-executable, main)
+	$(call bowerbird::build-bash-executable,main)
 
 $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh: $(BASHARGS_REPO)
 	@echo "Building bashargs..."
@@ -67,10 +67,10 @@ private_install: \
 		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(BINDIR)/$(TOOL))
 
 $(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
-	$(call boxerbird::install-as-link)
+	$(call bowerbird::install-as-link)
 
 $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
-	$(call boxerbird::install-as-executable)
+	$(call bowerbird::install-as-executable)
 
 
 .PHONY: private_test

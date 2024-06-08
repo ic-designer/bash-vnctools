@@ -1,5 +1,5 @@
 test-install-destdir:
-	$(MAKE) install DESTDIR=$(WORKDIR_TEST)/$@
+	$(MAKE) install DESTDIR=$(WORKDIR_TEST)/$@ 2>/dev/null
 	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-kill
 	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-list
 	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-open
@@ -87,6 +87,6 @@ test-uninstall-prefix: test-install-prefix
 	test ! -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-start
 
 test-workdir-root:
-	$(shell $(MAKE) all WORKDIR_ROOT=$(WORKDIR_TEST)/$@)
+	$(MAKE) all WORKDIR_ROOT=$(WORKDIR_TEST)/$@ 2>/dev/null
 	test -d $(WORKDIR_TEST)/$@/deps
 	test -d $(WORKDIR_TEST)/$@/build
