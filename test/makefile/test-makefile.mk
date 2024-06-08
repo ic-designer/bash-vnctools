@@ -1,92 +1,75 @@
+DESTDIR ?= $(error ERROR: Undefined variable DESTDIR)
+PREFIX ?= $(error ERROR: Undefined variable PREFIX)
+BINDIR ?= $(error ERROR: Undefined variable BINDIR)
+LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
+PKGSUBDIR ?= $(error ERROR: Undefined variable PKGSUBDIR)
+WORKDIR_TEST ?= $(error ERROR: Undefined variable WORKDIR_TEST)
+
+
 test-install-destdir:
-	$(MAKE) install DESTDIR=$(WORKDIR_TEST)/$@ 2>/dev/null
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-start
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-start
+	$(call vnctools::test-makefile::install-helper)
 
+test-install-bindir: BINDIR=bindir
 test-install-bindir:
-	$(MAKE) install DESTDIR=$(WORKDIR_TEST)/$@ BINDIR=bindir
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-start
-	test -f $(WORKDIR_TEST)/$@/bindir/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/bindir/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/bindir/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/bindir/vnctools-start
+	$(call vnctools::test-makefile::install-helper)
 
+test-install-libdir: LIBDIR=libdir
 test-install-libdir:
-	$(MAKE) install DESTDIR=$(WORKDIR_TEST)/$@ LIBDIR=libdir
-	test -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-start
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-start
+	$(call vnctools::test-makefile::install-helper)
 
+test-install-prefix: PREFIX=prefix
 test-install-prefix:
-	$(MAKE) install DESTDIR=$(WORKDIR_TEST)/$@ PREFIX=prefix
-	test -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-start
-	test -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-kill
-	test -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-list
-	test -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-open
-	test -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-start
+	$(call vnctools::test-makefile::install-helper)
 
-test-uninstall-destdir: test-install-destdir
-	$(MAKE) uninstall DESTDIR=$(WORKDIR_TEST)/$@
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-start
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-start
 
-test-uninstall-bindir: test-install-bindir
-	$(MAKE) uninstall DESTDIR=$(WORKDIR_TEST)/$@ BINDIR=bindir
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/lib/vnctools/vnctools-start
-	test ! -f $(WORKDIR_TEST)/$@/bindir/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/bindir/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/bindir/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/bindir/vnctools-start
+test-uninstall-destdir:
+	$(call vnctools::test-makefile::install-helper)
+	$(call vnctools::test-makefile::uninstall-helper)
 
-test-uninstall-libdir: test-install-libdir
-	$(MAKE) uninstall DESTDIR=$(WORKDIR_TEST)/$@ LIBDIR=libdir
-	test ! -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/libdir/vnctools/vnctools-start
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/$(HOME)/.local/bin/vnctools-start
+test-uninstall-bindir: BINDIR=bindir
+test-uninstall-bindir:
+	$(call vnctools::test-makefile::install-helper)
+	$(call vnctools::test-makefile::uninstall-helper)
 
-test-uninstall-prefix: test-install-prefix
-	$(MAKE) uninstall DESTDIR=$(WORKDIR_TEST)/$@ PREFIX=prefix
-	test ! -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/prefix/lib/vnctools/vnctools-start
-	test ! -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-kill
-	test ! -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-list
-	test ! -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-open
-	test ! -f $(WORKDIR_TEST)/$@/prefix/bin/vnctools-start
+test-uninstall-libdir: LIBDIR=libdir
+test-uninstall-libdir:
+	$(call vnctools::test-makefile::install-helper)
+	$(call vnctools::test-makefile::uninstall-helper)
+
+test-uninstall-prefix: PREFIX=prefix
+test-uninstall-prefix:
+	$(call vnctools::test-makefile::install-helper)
+	$(call vnctools::test-makefile::uninstall-helper)
+
 
 test-workdir-root:
 	$(MAKE) all WORKDIR_ROOT=$(WORKDIR_TEST)/$@ 2>/dev/null
 	test -d $(WORKDIR_TEST)/$@/deps
 	test -d $(WORKDIR_TEST)/$@/build
+
+
+define vnctools::test-makefile::install-helper
+	$(MAKE) install \
+			DESTDIR=$(WORKDIR_TEST)/$@ \
+			PREFIX=$(PREFIX) \
+			LIBDIR=$(LIBDIR) \
+			BINDIR=$(BINDIR) \
+			2>/dev/null
+	$(foreach f,$(VNCTOOL_LIST),\
+			test -f $(WORKDIR_TEST)/$@/$(LIBDIR)/$(PKGSUBDIR)/$(f);)
+	$(foreach f,$(VNCTOOL_LIST),\
+			test -f $(WORKDIR_TEST)/$@/$(BINDIR)/$(f);)
+endef
+
+define vnctools::test-makefile::uninstall-helper
+	$(MAKE) uninstall \
+			DESTDIR=$(WORKDIR_TEST)/$@ \
+			PREFIX=$(PREFIX) \
+			LIBDIR=$(LIBDIR) \
+			BINDIR=$(BINDIR) \
+			2>/dev/null
+	$(foreach f,$(VNCTOOL_LIST),\
+			test ! -f $(WORKDIR_TEST)/$@/$(LIBDIR)/$(PKGSUBDIR)/$(f);)
+	$(foreach f,$(VNCTOOL_LIST),\
+			test ! -f $(WORKDIR_TEST)/$@/$(BINDIR)/$(f);)
+endef
