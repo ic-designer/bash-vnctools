@@ -34,12 +34,11 @@ $(BASHARGS_REPO):
 	@echo
 
 WAXWING_BRANCH := main
-override WAXWING := $(WORKDIR_DEPS)/bash-waxwing/bin/waxwing
-$(WAXWING):
-	@echo "INFO: Fetching $@..."
-	git clone  --config advice.detachedHead=false --depth 1 \
+WAXWING.MK = $(WORKDIR_DEPS)/bash-waxwing/waxwing.mk
+$(WAXWING.MK):
+	@echo "Loading Waxwing..."
+	@git clone  --config advice.detachedHead=false --depth 1 \
 			https://github.com/ic-designer/bash-waxwing.git --branch $(WAXWING_BRANCH) \
 			$(WORKDIR_DEPS)/bash-waxwing
-	test -f $@
-	@echo "INFO: Fetching $@ completed."
 	@echo
+include $(WAXWING.MK)

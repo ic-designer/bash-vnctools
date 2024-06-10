@@ -4,6 +4,6 @@ WAXWING ?= $(error ERROR: Undefined variable WAXWING)
 WORKDIR_TEST ?= $(error ERROR: Undefined variable WORKDIR_TEST)
 
 # Targets
-test-vnctools-waxwing: $(WAXWING)
+test-vnctools-waxwing:
 	$(MAKE) install DESTDIR=$(abspath $(WORKDIR_TEST))
 	PATH=$(abspath $(WORKDIR_TEST)/$(BINDIR)):${PATH} $(WAXWING) test/vnctools
