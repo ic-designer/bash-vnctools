@@ -24,14 +24,31 @@ $(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-test,\
 
 # Other Dependencies
 BASHARGS_VERSION := 0.3.4
-override BASHARGS_REPO := $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION)
+override BASHARGS_REPO = $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION)
+override BASHARGS.SH = $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
+override BASHARGS.MK = $(BASHARGS_REPO)/bashargs.mk
+
 $(BASHARGS_REPO):
 	@echo "INFO: Fetching $@..."
 	mkdir -p $(WORKDIR_DEPS)
-	curl -sL https://github.com/ic-designer/bash-bashargs/archive/refs/tags/$(BASHARGS_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
+	curl --silent --show-error --show-error --fail --location \
+https://github.com/ic-designer/bash-bashargs/archive/\
+refs/tags/$(BASHARGS_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
 	test -d $@
 	@echo "INFO: Fetching $@ completed."
 	@echo
+
+$(BASHARGS.SH): $(BASHARGS_REPO)
+	@echo "Building bashargs..."
+	$(MAKE) -C $(BASHARGS_REPO) install \
+			DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib WORKDIR_ROOT=$(WORKDIR_ROOT)
+	test -f $@
+	@echo
+
+$(BASHARGS.MK): $(BASHARGS_REPO) $(BASHARGS.SH)
+	echo '# bashargs.mk' > $@
+include $(BASHARGS.MK)
+
 
 WAXWING_BRANCH := main
 WAXWING.MK = $(WORKDIR_DEPS)/bash-waxwing/waxwing.mk

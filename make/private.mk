@@ -39,17 +39,10 @@ private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
 	@for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/vnctools-%: \
-		$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh \
+		$(BASHARGS.SH) \
 		src/vnctools/vnctools-functions.sh \
 		src/vnctools/vnctools-%.sh
 	$(call bowerbird::build-bash-executable,main)
-
-$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh: $(BASHARGS_REPO)
-	@echo "Building bashargs..."
-	$(MAKE) -C $(BASHARGS_REPO) install \
-			DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib WORKDIR_ROOT=$(WORKDIR_ROOT)
-	test -f $@
-	@echo
 
 
 .PHONY: private_clean
