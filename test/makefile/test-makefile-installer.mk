@@ -42,12 +42,6 @@ test-uninstall-prefix:
 	$(call vnctools::test-makefile::uninstall-helper)
 
 
-test-workdir-root:
-	$(MAKE) all WORKDIR_ROOT=$(WORKDIR_TEST)/$@ 2>/dev/null
-	test -d $(WORKDIR_TEST)/$@/deps
-	test -d $(WORKDIR_TEST)/$@/build
-
-
 define vnctools::test-makefile::install-helper
 	$(MAKE) install \
 			DESTDIR=$(WORKDIR_TEST)/$@ \
