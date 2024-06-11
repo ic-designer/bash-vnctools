@@ -20,7 +20,7 @@ clean: private_clean
 	@$(if $(wildcard .waxwing), rm -rfv .waxwing)
 
 .PHONY: install
-## Installs libs and bine to $(DESTDIR)/$(LIBDIR)/$(NAME) and $(DESTDIR)/$(BINDIR)
+## Installs libs and bins to $(DESTDIR)/$(LIBDIR)/$(NAME) and $(DESTDIR)/$(BINDIR)
 install: private_install
 
 .PHONY: test
