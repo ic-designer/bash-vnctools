@@ -79,7 +79,9 @@ $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
 private_test: export VNCTOOLS_HISTORY_FILE=$(WORKDIR_TEST)/.vnctools-history
 private_test: test-vnctools-makefile test-vnctools-waxwing
 	printf "\e[1;32mPassed Tests\e[0m\n"
-$(eval $(call bowerbird::generate-test-runner,test-vnctools-makefile,test/makefile,test*.mk))
+ifdef bowerbird::generate-test-runner
+    $(eval $(call bowerbird::generate-test-runner,test-vnctools-makefile,test/makefile,test*.mk))
+endif
 
 
 .PHONY: private_uninstall
