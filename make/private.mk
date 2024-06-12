@@ -64,13 +64,13 @@ private_mostlyclean:
 
 
 .PHONY: private_install
-private_install: \
-		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/$(TOOL)) \
-		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(BINDIR)/$(TOOL))
+private_install: $(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(BINDIR)/$(TOOL))
 
+.PRECIOUS: $(DESTDIR)/$(BINDIR)/vnctools-%
 $(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
 	$(call bowerbird::install-as-link)
 
+.PRECIOUS: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
 $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
 	$(call bowerbird::install-as-executable)
 
