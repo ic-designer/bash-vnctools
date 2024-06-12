@@ -23,26 +23,22 @@ endif
 
 # Other Dependencies
 BASHARGS_BRANCH := main
+BASHARGS_URL := https://github.com/ic-designer/bash-bashargs.git
 override BASHARGS_REPO = $(WORKDIR_DEPS)/bash-bashargs
 override BASHARGS.SH = $(WORKDIR_BUILD)/bashargs/lib/bashargs/bashargs.sh
 
 $(BASHARGS_REPO):
 	@echo "INFO: Fetching $@..."
-	@git clone  --config advice.detachedHead=false --depth 1 https://github.com/ic-designer/bash-bashargs.git --branch $(BASHARGS_BRANCH) $(BASHARGS_REPO)
+	git clone  --config advice.detachedHead=false --depth 1 $(BASHARGS_URL) --branch $(BASHARGS_BRANCH) $(BASHARGS_REPO)
 	test -d $@
-	@echo "INFO: Fetching $@ completed."
+	@echo "INFO: Fetching $@ complete."
 	@echo
 
 $(BASHARGS.SH): $(BASHARGS_REPO)
-	@echo "Building bashargs..."
-	$(MAKE) -C $(BASHARGS_REPO) install \
-			DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib WORKDIR_ROOT=$(WORKDIR_ROOT)
+	@echo "INFO: Building library Bashargs..."
+	$(MAKE) -C $(BASHARGS_REPO) install DESTDIR= LIBDIR=$(WORKDIR_BUILD)/bashargs/lib WORKDIR_ROOT=$(WORKDIR_BUILD)/bashargs
 	test -f $@
 	@echo
-
-$(BASHARGS.MK): $(BASHARGS_REPO) $(BASHARGS.SH)
-	echo '# bashargs.mk' > $@
-include $(BASHARGS.MK)
 
 
 WAXWING_BRANCH := main
