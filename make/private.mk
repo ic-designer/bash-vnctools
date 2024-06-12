@@ -1,11 +1,11 @@
 # Config
 .DELETE_ON_ERROR:
 .SUFFIXES:
+MAKEFLAGS += --jobs
+MAKEFLAGS += --check-symlink-times
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
-MAKEFLAGS += --no-print-directory
 MAKEFLAGS += --warn-undefined-variables
-
 # Constants
 NAME := vnctools
 VERSION := $(shell git describe --always --dirty --broken 2> /dev/null)
@@ -16,10 +16,6 @@ PREFIX ?= $(error ERROR: Undefined variable PREFIX)
 BINDIR ?= $(error ERROR: Undefined variable BINDIR)
 LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
 WORKDIR_ROOT ?= $(error ERROR: Undefined variable WORKDIR_ROOT)
-
-override NAME := vnctools
-override PKGSUBDIR = $(NAME)
-override VERSION := $(shell git describe --always --dirty --broken 2> /dev/null)
 override WORKDIR_BUILD = $(WORKDIR_ROOT)/build/$(NAME)/$(VERSION)
 override WORKDIR_DEPS = $(WORKDIR_ROOT)/deps
 override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
@@ -27,9 +23,7 @@ override PKGSUBDIR = $(NAME)
 
 # Includes
 include make/deps.mk
-include test/makefile/test-makefile.mk
-include test/vnctools/test-vnctools.mk
-include $(BOXERBIRD.MK)
+include test/vnctools/test-vnctools-waxwing.mk
 
 # Targets
 override VNCTOOL_LIST := \
@@ -45,17 +39,10 @@ private_all: $(foreach TOOL, $(VNCTOOL_LIST), $(WORKDIR_BUILD)/$(TOOL))
 	@for f in $^; do test -f $${f}; done
 
 $(WORKDIR_BUILD)/vnctools-%: \
-		$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh \
+		$(BASHARGS.SH) \
 		src/vnctools/vnctools-functions.sh \
 		src/vnctools/vnctools-%.sh
-	$(call boxerbird::build-bash-executable, main)
-
-$(WORKDIR_BUILD)/lib/bashargs/bashargs.sh: $(BASHARGS_REPO)
-	@echo "Building bashargs..."
-	$(MAKE) -C $(BASHARGS_REPO) install \
-			DESTDIR=$(WORKDIR_BUILD) LIBDIR=lib WORKDIR_ROOT=$(WORKDIR_ROOT)
-	test -f $@
-	@echo
+	$(call bowerbird::build-bash-executable,main)
 
 
 .PHONY: private_clean
@@ -68,21 +55,33 @@ private_clean:
 	@echo
 
 
+.PHONY: private_mostlyclean
+private_mostlyclean:
+	@echo "Cleaning directories:"
+	@$(if $(wildcard $(WORKDIR_BUILD)), rm -rfv $(WORKDIR_BUILD))
+	@$(if $(wildcard $(WORKDIR_TEST)), rm -rfv $(WORKDIR_TEST))
+	@echo
+
+
 .PHONY: private_install
-private_install: \
-		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/$(TOOL)) \
-		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(BINDIR)/$(TOOL))
+private_install: $(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(BINDIR)/$(TOOL))
 
+.PRECIOUS: $(DESTDIR)/$(BINDIR)/vnctools-%
 $(DESTDIR)/$(BINDIR)/vnctools-%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
-	$(call boxerbird::install-as-link)
+	$(call bowerbird::install-as-link)
 
+.PRECIOUS: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%
 $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/vnctools-%: $(WORKDIR_BUILD)/vnctools-%
-	$(call boxerbird::install-as-executable)
+	$(call bowerbird::install-as-executable)
 
 
 .PHONY: private_test
-private_test : export VNCTOOLS_HISTORY_FILE=$(WORKDIR_TEST)/.vnctools-history
-private_test : test-makefile test-vnctools
+private_test: export VNCTOOLS_HISTORY_FILE=$(WORKDIR_TEST)/.vnctools-history
+private_test: test-vnctools-makefile test-vnctools-waxwing
+	printf "\e[1;32mPassed Tests\e[0m\n"
+ifdef bowerbird::generate-test-runner
+    $(eval $(call bowerbird::generate-test-runner,test-vnctools-makefile,test/makefile,test*.mk))
+endif
 
 
 .PHONY: private_uninstall

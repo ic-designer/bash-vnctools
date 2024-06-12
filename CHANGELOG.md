@@ -14,6 +14,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [Unreleased] - YYYY-MM-DD
+### Added
+- Makefile enhanced to run the tests in parallel.
+- Created a `mostlyclean` target to delete only test and build files.
+### Changed
+- Migrated from the deprecated boxerbird repo to the newer bowerbird dependencies.
+- Migrated the test runner over to bowerbird test.
+- Waxwing tests no longer use recursive make to test on an installed directory, but
+  instead will test the executables from the build directory.
+  Renamed the test files to include better filename prefixes and suffixes.
+- Combined URLs into a single line to fix issues with ubuntu remote hosted runner tests.
+- Split the makefile tests into separate installer and working directory tests.
+### Deprecated
+### Fixed
+- Fixed all the uninstall Makefile tests so that they now first install and then
+  uninstall the files. The tests didn't actually test anything meaningful before.
+- Fixed issues in the workflow where only the main branch was tested. Every branch is
+  now tested on push and pull request.
+- Tests are now ran in their own unique working directory to prevent parallel builds
+  from colliding on one another.
+- Restored the output from during recursive test calls to help with debug.
+- Wrapped the top level bowerbird macro calls in `ifdef` statements to prevent
+  undefined variable warning during recursive makefile rebuilds.
+- Installed `lib` and `bin` files are marked as precious to prevent deletion.
+### Security
+
+
 ## [0.5.0] - 2024-06-06
 ### Added
 - Created the `vnctools-connect` command that auto-resolves the display number and

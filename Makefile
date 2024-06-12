@@ -20,8 +20,13 @@ clean: private_clean
 	@$(if $(wildcard .waxwing), rm -rfv .waxwing)
 
 .PHONY: install
-## Installs libs and bine to $(DESTDIR)/$(LIBDIR)/$(NAME) and $(DESTDIR)/$(BINDIR)
+## Installs libs and bins to $(DESTDIR)/$(LIBDIR)/$(NAME) and $(DESTDIR)/$(BINDIR)
 install: private_install
+
+.PHONY: mostlyclean
+## Deletes only build files and test files created by Make, not dependencies.
+mostlyclean: private_mostlyclean
+	@$(if $(wildcard .waxwing), rm -rfv .waxwing)
 
 .PHONY: test
 ## Runs all the repository tests
