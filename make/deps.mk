@@ -4,9 +4,7 @@ WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 # Load Bowerbird Dependency Tools
 BOWERBIRD_DEPS.MK := $(WORKDIR_DEPS)/bowerbird-deps/bowerbird_deps.mk
 $(BOWERBIRD_DEPS.MK):
-	@curl --silent --show-error --fail --create-dirs -o $@ -L \
-https://raw.githubusercontent.com/ic-designer/make-bowerbird-deps/\
-main/src/bowerbird-deps/bowerbird-deps.mk
+	@curl --silent --show-error --fail --create-dirs --location -o $@ https://raw.githubusercontent.com/ic-designer/make-bowerbird-deps/main/src/bowerbird-deps/bowerbird-deps.mk
 include $(BOWERBIRD_DEPS.MK)
 
 # Bowerbird Compatible Dependencies
@@ -23,17 +21,13 @@ $(eval $(call bowerbird::git-dependency,$(WORKDIR_DEPS)/bowerbird-test,\
 
 
 # Other Dependencies
-BASHARGS_VERSION := 0.3.4
-override BASHARGS_REPO = $(WORKDIR_DEPS)/bash-bashargs-$(BASHARGS_VERSION)
-override BASHARGS.SH = $(WORKDIR_BUILD)/lib/bashargs/bashargs.sh
-override BASHARGS.MK = $(BASHARGS_REPO)/bashargs.mk
+BASHARGS_BRANCH := main
+override BASHARGS_REPO = $(WORKDIR_DEPS)/bash-bashargs
+override BASHARGS.SH = $(WORKDIR_BUILD)/bashargs/lib/bashargs/bashargs.sh
 
 $(BASHARGS_REPO):
 	@echo "INFO: Fetching $@..."
-	mkdir -p $(WORKDIR_DEPS)
-	curl --silent --show-error --show-error --fail --location \
-https://github.com/ic-designer/bash-bashargs/archive/\
-refs/tags/$(BASHARGS_VERSION).tar.gz | tar xz -C $(WORKDIR_DEPS)
+	@git clone  --config advice.detachedHead=false --depth 1 https://github.com/ic-designer/bash-bashargs.git --branch $(BASHARGS_BRANCH) $(BASHARGS_REPO)
 	test -d $@
 	@echo "INFO: Fetching $@ completed."
 	@echo
@@ -51,11 +45,10 @@ include $(BASHARGS.MK)
 
 
 WAXWING_BRANCH := main
-WAXWING.MK = $(WORKDIR_DEPS)/bash-waxwing/waxwing.mk
-$(WAXWING.MK):
-	@echo "Loading Waxwing..."
-	@git clone  --config advice.detachedHead=false --depth 1 \
-			https://github.com/ic-designer/bash-waxwing.git --branch $(WAXWING_BRANCH) \
-			$(WORKDIR_DEPS)/bash-waxwing
+WAXWING = $(WORKDIR_DEPS)/bash-waxwing/bin/waxwing
+$(WAXWING):
+	@echo "INFO: Building $@..."
+	@git clone  --config advice.detachedHead=false --depth 1 https://github.com/ic-designer/bash-waxwing.git --branch $(WAXWING_BRANCH) $(WORKDIR_DEPS)/bash-waxwing
+	@test -f $@
+	@echo "INFO: Build $@ complete."
 	@echo
-include $(WAXWING.MK)
