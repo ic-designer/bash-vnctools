@@ -1,11 +1,11 @@
 # Config
 .DELETE_ON_ERROR:
 .SUFFIXES:
+MAKEFLAGS += --jobs
+MAKEFLAGS += --check-symlink-times
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
-MAKEFLAGS += --no-print-directory
 MAKEFLAGS += --warn-undefined-variables
-
 # Constants
 NAME := vnctools
 VERSION := $(shell git describe --always --dirty --broken 2> /dev/null)
