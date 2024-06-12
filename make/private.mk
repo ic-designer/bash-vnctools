@@ -55,6 +55,14 @@ private_clean:
 	@echo
 
 
+.PHONY: private_mostlyclean
+private_mostlyclean:
+	@echo "Cleaning directories:"
+	@$(if $(wildcard $(WORKDIR_BUILD)), rm -rfv $(WORKDIR_BUILD))
+	@$(if $(wildcard $(WORKDIR_TEST)), rm -rfv $(WORKDIR_TEST))
+	@echo
+
+
 .PHONY: private_install
 private_install: \
 		$(foreach TOOL, $(VNCTOOL_LIST), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/$(TOOL)) \
