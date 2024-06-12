@@ -16,8 +16,7 @@ define vnctools::test-workdir::build-helper
 	$(MAKE) all \
 			WORKDIR_ROOT=$(WORKDIR_TEST)/$@ \
 			WORKDIR_BUILD=$(WORKDIR_TEST)/$@/$(WORKDIR_BUILD) \
-			WORKDIR_DEPS=$(WORKDIR_TEST)/$@/$(WORKDIR_DEPS) \
-			2>/dev/null
+			WORKDIR_DEPS=$(WORKDIR_TEST)/$@/$(WORKDIR_DEPS)
 	test -d $(WORKDIR_TEST)/$@/$(WORKDIR_BUILD)
 	test -d $(WORKDIR_TEST)/$@/$(WORKDIR_DEPS)
 endef
