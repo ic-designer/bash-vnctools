@@ -142,7 +142,6 @@ function vnctools_connect::find_remote_vnc_session() {
         vnctools_connect::new_remote_vnc_session ${username} ${hostname}
         local remote_vnc_session=$(vnctools_connect::get_remote_vnc_session \
             ${username} ${hostname})
-            exit 1
     fi
     echo ${remote_vnc_session:? ERROR: Unable to create a new VNC session}
 }
