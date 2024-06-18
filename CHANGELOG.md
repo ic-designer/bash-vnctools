@@ -39,7 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wrapped the top level bowerbird macro calls in `ifdef` statements to prevent
   undefined variable warning during recursive makefile rebuilds.
 - Installed `lib` and `bin` files are marked as precious to prevent deletion.
-### Security
+
+
+## [0.5.1] - 2024-06-18
+### Fixed
+- Fixed bug were vnctools-connect would prematurely exit and not connect if it had
+  to create a new vnc session on the remote machine.
 
 
 ## [0.5.0] - 2024-06-06
