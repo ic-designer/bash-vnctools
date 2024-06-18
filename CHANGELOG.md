@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 ```
 
+## [0.5.1] - 2024-06-18
+### Added
+### Changed
+### Deprecated
+### Fixed
+- Fixed bug were vnctools-connect would prematurely exit and not connect if it had
+  to create a new vnc session on the remote machine.
+### Security
+
+
 ## [0.5.0] - 2024-06-06
 ### Added
 - Created the `vnctools-connect` command that auto-resolves the display number and
