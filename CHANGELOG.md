@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Renamed the test files to include better filename prefixes and suffixes.
 - Combined URLs into a single line to fix issues with ubuntu remote hosted runner tests.
 - Split the makefile tests into separate installer and working directory tests.
+- Updated the `bowerbird-deps` and `bowerbird-test` calls to the new syntax.
 ### Deprecated
 ### Fixed
 - Fixed all the uninstall Makefile tests so that they now first install and then
