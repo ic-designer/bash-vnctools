@@ -16,6 +16,6 @@ function test_vnctools_list_with_valid_args() {
         --hostname=hostname \
         --username=username
     actual=$(waxwing::read_pipe)
-    expected="ssh username@hostname vncserver -list"
+    expected="ssh -CKT -o ConnectTimeout=2 username@hostname echo --vnctools--;find /tmp/ -user username -type f -name '.X*' -print 2>/dev/null | sed -n 's/.*X(.*)-lock.*/1/p'"
     [[ ${actual} == ${expected} ]]
 }

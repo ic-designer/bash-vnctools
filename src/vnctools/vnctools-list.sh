@@ -8,5 +8,11 @@ function main() {
     if [[ $(bashargs::get_arg --trace) = true ]]; then
         set -x
     fi
-    ssh $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) "vncserver -list"
+
+    vnctools_connect::_execute_remote_command \
+            $(bashargs::get_arg --username) \
+            $(bashargs::get_arg --hostname) \
+            "find /tmp/ -user $(bashargs::get_arg --username) \
+                    -type f -name '\.X*' -print 2>/dev/null \
+                    | sed -n 's/.*X\(.*\)-lock.*/\1/p'"
 }
