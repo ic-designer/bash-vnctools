@@ -117,8 +117,15 @@ function vnctools_connect::clean_up () {
 function vnctools_connect::execute_remote_command() {
     local username=$1
     local hostname=$2
-    echo "$(${SSH} ${SSH_FLAGS} ${username}@${hostname} "\
-        echo ${SSH_HEADER};${@:3}" 2>/dev/null | grep -A500 -m1 -e ${SSH_HEADER} | tail -n+2)"
+
+    local output=$(${SSH} ${SSH_FLAGS} ${username}@${hostname} \
+            "echo ${SSH_HEADER};${@:3}" 2>/dev/null | grep -A500 -m1 -e ${SSH_HEADER})
+    local exit_code=$?
+    if [[ ${exit_code} -ne 0 ]]; then
+        echo "ERROR: could not execute remote command ${@:3}"
+        exit ${exit_code}
+    fi
+    echo -e "${output}" | tail -n+2
 }
 
 function vnctools_connect::find_local_listening_port() {
