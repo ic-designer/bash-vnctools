@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Combined URLs into a single line to fix issues with ubuntu remote hosted runner tests.
 - Split the makefile tests into separate installer and working directory tests.
 - Updated the `bowerbird-deps` and `bowerbird-test` calls to the new syntax.
+- Added a return status check when executing remote commands over SSH. Trying to fix
+  an issue where some users see the `vnctools-connect` command hang intermittently.
 ### Deprecated
 ### Fixed
 - Fixed all the uninstall Makefile tests so that they now first install and then
