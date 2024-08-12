@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wrapped the top level bowerbird macro calls in `ifdef` statements to prevent
   undefined variable warning during recursive makefile rebuilds.
 - Installed `lib` and `bin` files are marked as precious to prevent deletion.
+- Added `-x` to the ssh flags to disable x11 forwarding
 
 
 ## [0.5.1] - 2024-06-18

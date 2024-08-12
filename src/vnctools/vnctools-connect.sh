@@ -1,5 +1,5 @@
 SSH='ssh'
-SSH_FLAGS='-CKT -o ConnectTimeout=2'
+SSH_FLAGS='-xCKT -o ConnectTimeout=2'
 SSH_HEADER='--vnctools--'
 
 PORT_MIN=1024
