@@ -9,10 +9,18 @@ function main() {
     if [[ $(bashargs::get_arg --trace) = true ]]; then
         set -x
     fi
-    ssh $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
-        "set -x
-        vncserver -kill :$(bashargs::get_arg --display)
-        \rm -f /tmp/.X$(bashargs::get_arg --display)-lock
-        \rm -f /tmp/.X11-unix/X$(bashargs::get_arg --display)
-        vncserver -list"
+
+    vnctools_connect::_execute_remote_command \
+            $(bashargs::get_arg --username) \
+            $(bashargs::get_arg --hostname) \
+            "set -x
+            
+            "
+
+    # ssh $(bashargs::get_arg --username)@$(bashargs::get_arg --hostname) \
+    #     "set -x
+    #     vncserver -kill :$(bashargs::get_arg --display)
+    #     \rm -f /tmp/.X$(bashargs::get_arg --display)-lock
+    #     \rm -f /tmp/.X11-unix/X$(bashargs::get_arg --display)
+    #     vncserver -list"
 }

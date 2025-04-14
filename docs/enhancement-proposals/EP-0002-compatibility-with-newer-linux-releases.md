@@ -5,15 +5,13 @@
 
 ## Summary
 
-VNC tools suffers from compatibility issues with newer linux releases. TigerVNC has
-deprecated the `vncserver` script, and `x11vnc` does not have a proper maintainer. The
-scripts need a major update since they relied so heavily on both `x11vnc` and the
+VNC tools suffers from compatibility issues with the newer linux releases. TigerVNC has
+deprecated the `vncserver` script, and `x11vnc` no longer has a proper maintainer. These
+scripts need a major update since they so reliant on on both `x11vnc` and the
 `vncserver` command.
 
 
 ## Proposal
-
-
 
 VNC tools will consist of the following commands
 - `vnctools-connect`
@@ -26,30 +24,58 @@ VNC tools will consist of the following commands
 
 ```
 usage: vnctools-connect --username=<username> --hostname=<hostname>
-                       [--display=<display>] [--localport=<localport>]
-                       [--remoteport=<remoteport>] [--resolution=<resolution>]
-                       [--depth=<depth>] [--realvnc | --screenshare] [--sleep=<time>]
-                       [--trace]
+                       [--type=<type>] [--display=<display>] [--localport=<localport>]
+                       [--resolution=<resolution>] [--depth=<depth>]
+                       [--realvnc | --screenshare] [--sleep=<time>] [--trace]
 
         --username=<username>       remote server <username>
         --hostname=<hostname>       remote server <hostname>
+        --type=<type>               connection <type> (Default: AUTO)
         --display=<display>         desktop <display> number (Default: AUTO)
         --localport=<localport>     local forwarding port number (Default: AUTO)
-        --remoteport=<remoteport>   remote forwarding port number (Default: AUTO)
         --resolution=<resolution>   desktop <resolution> specified as <width>x<height>
         --depth=<depth>             desktop pixel depth (Default: 24)
-        --realvnc                   open the desktop using realVNC app
-        --screenshare               open the desktop using OSX screenshare app
+        --realvnc                   open the desktop using realVNC
+        --screenshare               open the desktop using MacOS screenshare
         --sleep=<time>              wait <time> in seconds between commands (Default: 4)
         --trace                     enable debug tracing
 ```
 
-Opens a remote VNC desktop using an ssh tunnel. If not explicitly specified, this
-command will autodetect available ports and display numbers for establishing a VNC
-session. When detecting the display number, the command will poll the remote server
-for any existing VNC sessions. If a session is discovered, the command will connect to
-the discoverd session number, otherwise, the command will first create a new VNC session
-and then connect to that session number.
+Opens a remote VNC desktop through an SSH tunnel.
+
+This command can create new VNC sessions and connect to existing VNC sessions on remote
+servers. VNC session display numbers and forwarding ports can be auto-resolved,
+and display properties such as resolution and depth can be adjusted on the fly. This
+command provides a unified interface for establishing VNC connections from MacOS to
+Linux machines.
+
+The following connection type are supported:
+
+- Use the standard systemd vncserver service with a user-assigned port number.
+- Use direct calls to Xvnc with user-specified port numbers.
+- Use direct calls to Xvnc with auto-resolved port numbers.
+
+
+This command supports connection that use the standard systemd vncserver service. When
+the connection type is set to systemd, `--type=systemd`, the command will try and
+establish a VNC session using the systemd vncserver service with the user port mappings
+from `/etc/tigervnc/vncserver.users`. An error is raised if a user port mapping is not
+found. The command will connect to existing VNC session or create a new VNC session
+using the user assigned port number. The display argument, `--display=<display>` is
+ignored when establishing connections using the standard vncserver service.
+
+This command supports direct calls to Xvnc using a copy of the legacy vncserver script.
+When the connection type is set to Xvnc, `--type=xvnc`, the command will use the display
+argument, `--display=<display>`, to determine the VNC display number to use. If a
+display number is specified, the connect command will either create a new session or
+connect to an existing session with that display number. An error is raised if a
+connection cannot be established with the specified display. When the display number is
+set to automatic, `--display=AUTO`, the connect command will either connect to an
+existing Xvnc type session or will create a new session using the whatever free display
+numbers are available. When the connection type is set to Xvnc, `--type=xvnc`, the
+connect command will not attempt to connect to user assigned port number located in
+`/etc/tigervnc/vncserver.users`. Futhermore, to help mitigate potential collisions,
+the display numbers used by Xvnc connection types will be restricted to [50000, 60000].
 
 
 ### `vnctools-history`
@@ -97,6 +123,9 @@ identifies active VNC sessions by lock files located under `/tmp/.X*-lock`.
 
 
 ## Requirements
+
+### Launching `vncserver`
+
 
 ### Process Tag
 
